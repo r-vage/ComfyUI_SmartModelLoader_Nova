@@ -1,0 +1,13 @@
+{
+  "_comments": {
+    "description": "ComfyUI Smart Model Loader configuration",
+    "log_level": "error | warning | info | debug",
+    "civitai_api_key": "Optional CivitAI API key. It is stored only in private local config.json.",
+    "hf_token": "Optional Hugging Face token. It is stored only in private local config.json.",
+    "allow_legacy_model_formats": "Administrator-local override for pickle-capable diffusion artifacts. Keep false unless files are trusted."
+  },
+  "log_level": "warning",
+  "civitai_api_key": "",
+  "hf_token": "",
+  "allow_legacy_model_formats": false
+}

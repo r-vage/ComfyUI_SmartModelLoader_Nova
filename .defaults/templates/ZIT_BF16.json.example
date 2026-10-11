@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "model": {
+    "kind": "unet",
+    "resource": {
+      "name": "ZiT/z_image_turbo_bf16.safetensors",
+      "sha256": "2407613050b809ffdff18a4ac99af83ea6b95443ecebdf80e064a79c825574a6",
+      "source": {
+        "provider": "civitai",
+        "reference": "urn:air:zimageturbo:diffusionmodel:civitai:2168935@2442439+2333412"
+      }
+    },
+    "options": {
+      "weight_dtype": "default"
+    },
+    "attentionBackend": "pytorch attention"
+  },
+  "clip": {
+    "source": "external",
+    "skip": null,
+    "type": "lumina2",
+    "encoders": [
+      {
+        "id": "clip-1",
+        "resource": {
+          "name": "qwen3_4B_uncensored_int8_convrot.safetensors",
+          "sha256": "369f13a21adf3966cdd3b6f9678244fb2c12cff37968482cc78b74b68221cb21",
+          "source": {
+            "provider": "civitai",
+            "reference": "urn:air:zimageturbo:unknown:civitai:2373678@3208696+3090321"
+          }
+        }
+      }
+    ]
+  },
+  "vae": {
+    "source": "external",
+    "resource": {
+      "name": "zImageTurbo_vae.safetensors",
+      "sha256": "afc8e28272cd15db3919bacdb6918ce9c1ed22e96cb12c4d5ed0fba823529e38",
+      "source": {
+        "provider": "huggingface",
+        "reference": "titomatus0203/zimageturbo_vae",
+        "revision": "efe74c70ee3a978431ebeac5ebc5649057d62769"
+      }
+    }
+  },
+  "sampler": {
+    "steps": 9,
+    "cfg": 1,
+    "denoise": 1,
+    "sampler_name": "euler",
+    "scheduler": "simple"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "model": {
+    "kind": "checkpoint",
+    "resource": {
+      "name": "unholyDesireMixSinister_v80.safetensors",
+      "sha256": "6945832a725155f414edb735502b84ef16c53b9fd8318d8da3e6103b210dc1a3",
+      "source": {
+        "provider": "civitai",
+        "reference": "urn:air:sdxl:checkpoint:civitai:1307857@2824082"
+      }
+    },
+    "options": {},
+    "attentionBackend": "pytorch attention"
+  },
+  "clip": {
+    "source": "baked",
+    "skip": -2
+  },
+  "vae": {
+    "source": "baked"
+  },
+  "sampler": {
+    "steps": 30,
+    "cfg": 7.5,
+    "denoise": 1,
+    "sampler_name": "ddim",
+    "scheduler": "normal"
+  }
+}

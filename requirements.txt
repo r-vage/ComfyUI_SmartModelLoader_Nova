@@ -1,0 +1,19 @@
+torch
+numpy
+safetensors>=0.4,<0.9
+requests
+aiohttp
+huggingface_hub>=0.30,<2
+gguf>=0.13.0,<0.20
+tqdm
+einops
+packaging
+transformers>=4.50.3
+sentencepiece
+protobuf
+
+# Optional: Nunchaku quantized model support (compiled CUDA package).
+# Install a ComfyUI-compatible nunchaku build separately when needed.
+# Optional PuLID also needs InsightFace, facexlib, timm and OpenCV.
+# PuLID must have exactly one ONNX Runtime distribution. Do not install both
+# onnxruntime and onnxruntime-gpu; see Readme/Nunchaku_PuLID_CUDA_Troubleshooting.md.

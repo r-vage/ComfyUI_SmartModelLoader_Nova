@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "model": {
+    "kind": "unet",
+    "resource": {
+      "name": "Flux/Kreamania I_fp8.safetensors",
+      "sha256": "87eec160101661ed31f98f98d031e5f6386424cb1eb2da8796fca8d72a293f96",
+      "source": {
+        "provider": "civitai",
+        "reference": "urn:air:flux1:checkpoint:civitai:778691@2106807+2001949"
+      }
+    },
+    "options": {
+      "weight_dtype": "fp8_e4m3fn"
+    },
+    "attentionBackend": "pytorch attention"
+  },
+  "clip": {
+    "source": "external",
+    "skip": null,
+    "type": "flux",
+    "encoders": [
+      {
+        "id": "clip-1",
+        "resource": {
+          "name": "ViT-L-14-TEXT-detail-improved-hiT-GmP-TE-only-HF.safetensors",
+          "sha256": "eddcf5e2e2a88550aab21e04895e8ce4b2977e6c11dbbc7675b07927a3cda0dd",
+          "source": {
+            "provider": "huggingface",
+            "reference": "zer0int/CLIP-GmP-ViT-L-14",
+            "revision": "0b0bcd1f834709cca4b197dceacd9a04858077de"
+          }
+        }
+      },
+      {
+        "id": "clip-2",
+        "resource": {
+          "name": "t5xxl_fp8_e4m3fn_scaled.safetensors",
+          "sha256": "a498f0485dc9536735258018417c3fd7758dc3bccc0a645feaa472b34955557a",
+          "source": {
+            "provider": "huggingface",
+            "reference": "zhangjiong/t5xxl_fp8_e4m3fn_scaled.safetensors",
+            "revision": "e07e92786fe68027033338f2d9fc260c1f97e851"
+          }
+        }
+      }
+    ]
+  },
+  "vae": {
+    "source": "external",
+    "resource": {
+      "name": "Flux-vae.safetensors",
+      "sha256": "f5b59a26851551b67ae1fe58d32e76486e1e812def4696a4bea97f16604d40a3",
+      "source": {
+        "provider": "huggingface",
+        "reference": "black-forest-labs/FLUX.1-dev",
+        "revision": "3de623fc3c33e44ffbe2bad470d0f45bccf2eb21"
+      }
+    }
+  },
+  "sampler": {
+    "steps": 20,
+    "cfg": 1,
+    "denoise": 1,
+    "sampler_name": "dpmpp_2m",
+    "scheduler": "sgm_uniform",
+    "flux_guidance": 2.5
+  },
+  "modelSampling": {
+    "method": "Flux",
+    "parameters": {
+      "base_shift": 0.5,
+      "shift": 1.15
+    }
+  }
+}

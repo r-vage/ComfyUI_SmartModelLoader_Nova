@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "model": {
+    "kind": "unet",
+    "resource": {
+      "name": "Flux2/Fluxtrait_klein_9b_V2.safetensors",
+      "sha256": "cb4694ee32ed911ff32a2463f7062da0c3c7186c84e2e2c2f744f12f9a71bcb1",
+      "source": {
+        "provider": "civitai",
+        "reference": "urn:air:flux2:checkpoint:civitai:2086049@2805234+2691528"
+      }
+    },
+    "options": {
+      "weight_dtype": "fp8_e4m3fn"
+    },
+    "attentionBackend": "pytorch attention"
+  },
+  "clip": {
+    "source": "external",
+    "skip": null,
+    "type": "flux2",
+    "encoders": [
+      {
+        "id": "clip-1",
+        "resource": {
+          "name": "qwen_3_8b_fp8mixed_abliterated.safetensors",
+          "sha256": "b61c59554ecc8374c55bc2c41b467953b23b499aafe6c04c1e58dd52b2a29c14",
+          "source": {
+            "provider": "huggingface",
+            "reference": "zhazhazha/qwen_3_8b_fp8mixed_abliterated",
+            "revision": "0f466aad1f0d80bb0df1ac098b18cdce767cf146"
+          }
+        }
+      }
+    ]
+  },
+  "vae": {
+    "source": "external",
+    "resource": {
+      "name": "Flux2-vae.safetensors",
+      "sha256": "ca70d2202afe6415bdbcb8793ba8cd99fd159cfe6192381504d6c4d3036e0f04",
+      "source": {
+        "provider": "huggingface",
+        "reference": "black-forest-labs/FLUX.2-klein-9B",
+        "revision": "92196c8e11f7b6cf2b7493e037d8c5345c559216"
+      }
+    }
+  },
+  "sampler": {
+    "steps": 5,
+    "cfg": 1.5,
+    "denoise": 1,
+    "sampler_name": "euler",
+    "scheduler": "simple",
+    "flux_guidance": 3.5
+  }
+}

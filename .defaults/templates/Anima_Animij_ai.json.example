@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "model": {
+    "kind": "unet",
+    "resource": {
+      "name": "Anima/animij_ai.safetensors",
+      "sha256": "ce7408466e260314f66de1463f0d6b05d21668772b8bbac028c8a9c11bc75fc1",
+      "source": {
+        "provider": "civitai",
+        "reference": "urn:air:anima:diffusionmodel:civitai:1353314@3166879"
+      }
+    },
+    "options": {
+      "weight_dtype": "default"
+    },
+    "attentionBackend": "pytorch attention"
+  },
+  "clip": {
+    "source": "external",
+    "skip": null,
+    "type": "qwen_image",
+    "encoders": [
+      {
+        "id": "clip-1",
+        "resource": {
+          "name": "anima_baseV10_txt.safetensors",
+          "sha256": "cd2a512003e2f9f3cd3c32a9c3573f820bb28c940f73c57b1ddaa983d9223eba",
+          "source": {
+            "provider": "civitai",
+            "reference": "urn:air:anima:diffusionmodel:civitai:1353314@3189494+3073220"
+          }
+        }
+      }
+    ]
+  },
+  "vae": {
+    "source": "external",
+    "resource": {
+      "name": "qwen_image_vae.safetensors",
+      "sha256": "a70580f0213e67967ee9c95f05bb400e8fb08307e017a924bf3441223e023d1f",
+      "source": {
+        "provider": "civitai",
+        "reference": "urn:air:anima:diffusionmodel:civitai:1353314@3189494+3073209"
+      }
+    }
+  },
+  "sampler": {
+    "steps": 32,
+    "cfg": 6,
+    "denoise": 1,
+    "sampler_name": "er_sde",
+    "scheduler": "simple"
+  },
+  "modelSampling": {
+    "method": "AuraFlow",
+    "parameters": {
+      "shift": 3
+    }
+  }
+}

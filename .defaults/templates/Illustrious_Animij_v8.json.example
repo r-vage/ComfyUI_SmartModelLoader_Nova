@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "model": {
+    "kind": "checkpoint",
+    "resource": {
+      "name": "animij_v8.safetensors",
+      "sha256": "613c8ec356a01cf7a4a78454a687674a1649d5395d83786346d46b6dbbd0365d",
+      "source": {
+        "provider": "civitai",
+        "reference": "urn:air:sdxl:checkpoint:civitai:1353314@2579397"
+      }
+    },
+    "options": {},
+    "attentionBackend": "pytorch attention"
+  },
+  "clip": {
+    "source": "baked",
+    "skip": -2
+  },
+  "vae": {
+    "source": "baked"
+  },
+  "sampler": {
+    "steps": 30,
+    "cfg": 7,
+    "denoise": 1,
+    "sampler_name": "euler_ancestral",
+    "scheduler": "sgm_uniform"
+  }
+}
