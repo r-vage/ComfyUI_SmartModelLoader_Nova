@@ -1,5 +1,6 @@
 import { app, api } from './comfy/index.js';
 import { showSmartModelLoaderToast } from './smart-model-loader-notifications.js';
+import { initializeNodeDesign } from './smart-model-loader-design.js';
 
 const PREFIX = '/smart-model-loader-v2/config';
 const TOKEN_MASK = '••••••••';
@@ -44,6 +45,7 @@ app.registerExtension({
         } catch (error) {
             showSmartModelLoaderToast('Could not read settings', error, 'warn');
         }
+        await initializeNodeDesign(appRef, config);
         const add = (setting) => appRef.ui.settings.addSetting(setting);
         add({
             id: 'SML2.LogLevel', category: [...CATEGORY, 'LogLevel'], name: '📝 Log Level',

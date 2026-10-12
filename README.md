@@ -1,10 +1,16 @@
 # ComfyUI Smart Model Loader v2
 
-This independent repository starts at **1.0.0**. It provides a
-pipe-based diffusion workflow with compact Jade controls and collapsible
+This independent repository provides a
+pipe-based diffusion workflow with compact controls and collapsible
 option bars in classic canvas and Nodes 2.0.
 The design is adapted from DaSiWa, using dynamic controls to reduce widget and
 layout overhead.
+
+Choose **Settings → SML2 → General → Node design** for Jade (default), Neutral,
+Ocean or Amethyst. Jade, Ocean and Amethyst share a dark background with different
+control colors; Neutral keeps its lighter gray background. The selection covers
+shared panels and Download Manager, saves in `config.json` and loads on startup.
+See [Node designs](Readme/Node_Design.md) for the palettes and scope.
 
 Find this pack's nodes under **🌒 Smart Model Loader v2** in ComfyUI's Add Node
 menu, separate from the original **🌒 Smart Model Loader** category.

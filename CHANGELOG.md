@@ -1,5 +1,27 @@
 # Changelog
 
+## 2026-10-12
+
+### Version: 1.0.1
+
+- **Feat**
+  - Add Jade, Neutral, Ocean and Amethyst designs under SML2 → General → Node design. Apply the selected palette to shared controls, searchable menus, preset dialogs and Download Manager in classic canvas and Nodes 2.0.
+  - Save the design in private config.json and load it on startup. Jade, Ocean and Amethyst share RGB 26,26,26 node/dialog backgrounds with different control colors. Neutral keeps RGB 58,58,58, gray controls and no glow. Preserve node title colors, custom backgrounds and workflow values, with independent settings and styling for this pack.
+- **Docs**
+  - Document the design presets, settings location and Download Manager appearance.
+- **Changed files**
+  - core/config_store.py
+  - core/server_endpoints.py
+  - js/smart-model-loader-design.js
+  - js/smart-model-loader-settings.js
+  - js/smart-model-loader-v2.css
+  - js/smart-model-loader-download-manager.js
+  - .defaults/config.json.example
+  - pyproject.toml
+  - README.md
+  - Readme/Node_Design.md
+  - Readme/Download_Manager.md
+
 ## 2026-10-11
 
 ### Version: 1.0.0

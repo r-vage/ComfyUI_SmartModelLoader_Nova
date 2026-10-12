@@ -58,6 +58,7 @@ from .model_loader.validation import (
 )
 
 _MODEL_IO_SEMAPHORE = asyncio.Semaphore(2)
+_NODE_DESIGNS = ("jade", "neutral", "ocean", "amethyst")
 
 # Detect ComfyUI native dynamic VRAM:
 # 0.18.x: ModelPatcher gained 'model_mmap_residency'
@@ -920,9 +921,11 @@ class StandaloneConfigEndpoints:
         @PromptServer.instance.routes.get("/smart-model-loader-v2/config/all")
         async def get_all_config(_request):
             hf_configured, hf_source = get_auth_token_status("huggingface")
+            node_design = get_config_value("node_design", "jade")
             return web.json_response(
                 {
                     "log_level": get_config_value("log_level", "warning"),
+                    "node_design": node_design if node_design in _NODE_DESIGNS else "jade",
                     "allow_legacy_model_formats": get_config_value(
                         "allow_legacy_model_formats", False,
                     ),
@@ -943,6 +946,7 @@ class StandaloneConfigEndpoints:
             data = await read_json_object_request(request, max_bytes=16 * 1024)
             allowed = {
                 "log_level",
+                "node_design",
                 "allow_legacy_model_formats",
                 "civitai_api_key",
                 "hf_token",
@@ -958,6 +962,11 @@ class StandaloneConfigEndpoints:
                     if value not in {"error", "warning", "info", "debug"}:
                         return web.json_response(
                             {"success": False, "error": "Invalid log level"}, status=400,
+                        )
+                elif key == "node_design":
+                    if not isinstance(value, str) or value not in _NODE_DESIGNS:
+                        return web.json_response(
+                            {"success": False, "error": "Invalid node design"}, status=400,
                         )
                 elif key == "allow_legacy_model_formats":
                     if not isinstance(value, bool):
