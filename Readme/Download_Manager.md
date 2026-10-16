@@ -67,7 +67,7 @@ For an empty LoRA Stack row, open its **i** button and follow the
 - SML2 menu: choose **SML2 → SML2 Download Manager (Beta)**.
 - Classic menu: use the **SML2 Download Manager (Beta)** button in the legacy top menu.
 
-The manager follows the [Node design](Node_Design.md) selected in **Settings → SML2 → Appearance**, with comfortably sized controls. Jade is the default. The separate **Source** and **View** bars share the top row, with Source first. Choose **CivitAI** or **Hugging Face** under Source, and switch between **Files** and **Queue** under View. Selected options match the loader forms, including their purple highlight in Jade.
+The manager follows the [Node design](Node_Design.md) selected in **Settings → SML2 → Appearance**, with comfortably sized controls. Neutral is the default. The separate **Source** and **View** bars share the top row, with Source first. Choose **CivitAI** or **Hugging Face** under Source, and switch between **Files** and **Queue** under View. Selected options match the loader forms, including their purple highlight in Jade.
 
 **Source details** can be collapsed by clicking its heading. Collapsing it keeps the locator and revision values. Opening a source from a loader shows its provider, locator and revision and retrieves the file list. Files enter the queue only when you select **Add Selected to Queue**.
 

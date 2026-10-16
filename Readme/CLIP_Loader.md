@@ -1,6 +1,6 @@
 # CLIP Loader
 
-Add **CLIP Loader** under **Smart Model Loader v2 → Loader**. Its serialized ID
+Add **CLIP Loader** under **Smart Model Loader Nova → Loader**. Its serialized ID
 is `CLIP Loader [SML2]`. Outputs are **clip** (CLIP) and **clip_names** (STRING).
 `clip_names` contains all loaded filenames separated by a comma and a space, in
 encoder-row order. Subfolder paths and repeated selections are preserved, for

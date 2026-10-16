@@ -1,7 +1,7 @@
 # LoRA Stack
 
 Add **LoRA Stack** and **LoRA Stack Apply** from
-**Smart Model Loader v2 → Tools**. Connect the stack output to Apply's
+**Smart Model Loader Nova → Tools**. Connect the stack output to Apply's
 `lora_stack` input, then connect the MODEL and/or CLIP used by your rows.
 Apply outputs `model`, `clip`, and a `lora_names` string containing each
 enabled row's filename and selected strengths.

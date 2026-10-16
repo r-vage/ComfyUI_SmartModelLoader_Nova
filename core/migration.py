@@ -10,6 +10,7 @@ from typing import Any
 from .config_store import CONFIG_PATH, ensure_config_exists, update_config_values
 from .json_store import JsonStoreError, read_json_object, write_json_object
 from .logger import log
+from .theme_defaults import extract_theme_defaults
 
 _LOG_PREFIX = "Migration"
 _MIGRATION_MARKER = ".eclipse_loader_data_migrated"
@@ -114,6 +115,7 @@ def _marker_is_current(data: dict[str, Any], examined: set[str]) -> bool:
 
 def run_migrations(repo_root: str | os.PathLike[str] | None = None) -> None:
     root = Path(repo_root) if repo_root is not None else Path(__file__).resolve().parent.parent
+    extract_theme_defaults(root)
     ensure_config_exists()
     marker = root / _MIGRATION_MARKER
     marker_data = _read_marker(marker)

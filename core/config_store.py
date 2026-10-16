@@ -35,7 +35,7 @@ def _fallback_config() -> dict[str, Any]:
             "allow_legacy_model_formats": "Administrator-local override for pickle-capable .ckpt/.pt/.pth/.bin diffusion artifacts. Keep false unless the files are trusted.",
         },
         "log_level": "warning",
-        "node_design": "jade",
+        "node_design": "neutral",
         "hf_token": "",
         "civitai_api_key": "",
         "allow_legacy_model_formats": False,

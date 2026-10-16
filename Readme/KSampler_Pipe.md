@@ -1,6 +1,6 @@
 # KSampler Pipe
 
-Find **KSampler Pipe [SML2]** under **Smart Model Loader v2 → Sampler**.
+Find **KSampler Pipe [SML2]** under **Smart Model Loader Nova → Sampler**.
 It uses the same Jade menus, compact sampler controls and seed row as Smart
 Model Loader in classic canvas and Nodes 2.0. It has no presets or integrity
 controls.

@@ -1,7 +1,7 @@
 [project]
-name = "ComfyUI_SmartModelLoader_v2"
+name = "ComfyUI_SmartModelLoader_Nova"
 description = "Complete ComfyUI diffusion pipeline with secure model loading, text conditioning, pipe sampling, and verified downloads."
-version = "1.0.2"
+version = "1.0.3"
 license = {file = "LICENSE"}
 dependencies = [
     "torch",
@@ -20,12 +20,12 @@ dependencies = [
 ]
 
 [project.urls]
-Repository = "https://github.com/r-vage/ComfyUI_SmartModelLoader_v2"
+Repository = "https://github.com/r-vage/ComfyUI_SmartModelLoader_Nova"
 
 [tool.comfy]
 PublisherId = "rvage"
-DisplayName = "ComfyUI Smart Model Loader v2"
-Icon = "https://raw.githubusercontent.com/r-vage/ComfyUI_SmartModelLoader_v2/refs/heads/main/Readme/icon_eclipse.png"
+DisplayName = "ComfyUI Smart Model Loader Nova"
+Icon = "https://raw.githubusercontent.com/r-vage/ComfyUI_SmartModelLoader_Nova/refs/heads/main/Readme/icon_eclipse.png"
 
 [tool.ruff]
 target-version = "py312"

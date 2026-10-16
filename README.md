@@ -1,4 +1,4 @@
-# ComfyUI Smart Model Loader v2
+# ComfyUI Smart Model Loader Nova
 
 This independent repository provides a
 pipe-based diffusion workflow with compact controls and collapsible
@@ -6,14 +6,16 @@ option bars in classic canvas and Nodes 2.0.
 The design is adapted from DaSiWa, using dynamic controls to reduce widget and
 layout overhead.
 
-Choose **Settings → SML2 → Appearance → Node design** for Jade (default), Neutral,
+Choose **Settings → SML2 → Appearance → Node design** for Neutral (default), Jade,
 Ocean, Amethyst, Amber or a custom JSON theme. Jade, Ocean, Amethyst and Amber
 share a dark background with different control colors; Neutral keeps its lighter
 gray background. The selection covers
 shared panels and Download Manager, saves in `config.json` and loads on startup.
 See [Node designs](Readme/Node_Design.md) for theme creation, reload and background precedence.
+Bundled themes are extracted once from `.defaults/themes/` into the user-owned
+`themes/` folder. Updates preserve edits and deletions.
 
-Find this pack's nodes under **🌒 Smart Model Loader v2** in ComfyUI's Add Node
+Find this pack's nodes under **🌒 Smart Model Loader Nova** in ComfyUI's Add Node
 menu, separate from the original **🌒 Smart Model Loader** category.
 
 The main nodes are **Smart Model Loader [SML2]**, **CLIP Loader [SML2]**,
@@ -110,7 +112,7 @@ downloads. Follow the [Source / integrity tour](Readme/Download_Manager.md#visua
 Every node in this pack uses a unique `[SML2]` ID, so both loader packs can be
 installed together with separate menus. Existing workflow nodes with original-pack
 IDs continue to belong to the original pack; add their `[SML2]` counterparts from
-the v2 menu when switching a workflow. PuLID requires its compatible optional
+the Nova menu when switching a workflow. PuLID requires its compatible optional
 dependencies. LTX text projections are supported through
 Smart Model Loader's **External + Model File** CLIP source.
 
@@ -120,12 +122,12 @@ From your ComfyUI installation:
 
 ```bash
 cd custom_nodes
-git clone https://github.com/r-vage/ComfyUI_SmartModelLoader_v2.git
-cd ComfyUI_SmartModelLoader_v2
+git clone https://github.com/r-vage/ComfyUI_SmartModelLoader_Nova.git
+cd ComfyUI_SmartModelLoader_Nova
 python -m pip install -r requirements.txt
 ```
 
-Restart ComfyUI, then open **Add Node → Smart Model Loader v2**. Settings appear
+Restart ComfyUI, then open **Add Node → Smart Model Loader Nova**. Settings appear
 under **SML2 → General** and **SML2 → Appearance**, using `SML2.*` IDs.
 
 Run the install command with ComfyUI's own Python environment. The requirements
@@ -144,6 +146,9 @@ ONNX Runtime setup. Standard checkpoint and UNet workflows do not need Nunchaku.
 
 ## Compatibility and ownership
 
+- The Nova folder/repository name keeps existing `[SML2]` workflows, settings
+  and API names intact. If you rename an existing checkout, restart ComfyUI
+  and reload the browser so its extension URLs use the new folder.
 - Smart Model Loader, CLIP Loader, LoRA Stack and KSampler Pipe use the shared
   DOM design and structured configuration saved with the workflow.
 - Importing a v1 template converts its settings, not the nodes in an old
@@ -174,6 +179,6 @@ ONNX Runtime setup. Standard checkpoint and UNet workflows do not need Nunchaku.
 - [Security model](Readme/Model_Loader_Security.md)
 
 For bugs and feature requests, use the
-[GitHub issue tracker](https://github.com/r-vage/ComfyUI_SmartModelLoader_v2/issues).
+[GitHub issue tracker](https://github.com/r-vage/ComfyUI_SmartModelLoader_Nova/issues).
 
 Licensed under Apache-2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).

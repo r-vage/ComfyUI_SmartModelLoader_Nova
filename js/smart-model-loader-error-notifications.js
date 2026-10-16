@@ -28,7 +28,7 @@ app.registerExtension({
     name: 'SML2.ErrorNotifications',
     beforeRegisterNodeDef(_nodeType, nodeData) {
         // Route errors by the registering Python module, independent of display names.
-        if (/(?:^|\.)comfyui_smartmodelloader_v2(?:\.|$)/i.test(nodeData.python_module ?? '')) {
+        if (/(?:^|\.)comfyui_smartmodelloader_nova(?:\.|$)/i.test(nodeData.python_module ?? '')) {
             ownedNodes.set(nodeData.name, nodeData.display_name || nodeData.name);
         } else {
             ownedNodes.delete(nodeData.name);

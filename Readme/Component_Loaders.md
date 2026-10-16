@@ -13,7 +13,7 @@ buttons. See the [CLIP Loader guide](CLIP_Loader.md).
 
 ## VAE Loader
 
-**Node:** `VAE Loader [SML2]` — Category: `Smart Model Loader v2 > Loader`
+**Node:** `VAE Loader [SML2]` — Category: `Smart Model Loader Nova > Loader`
 
 Loads an external VAE through ComfyUI's architecture detection. The shared loader
 also supports Qwen Image 2.1 VAEs in native and recognized Diffusers formats; see
@@ -41,7 +41,7 @@ guarantee that the VAE remains resident between workflow executions.
 
 ## VAE Loader Video+Audio
 
-**Node:** `VAE Loader Video+Audio [SML2]` — Category: `Smart Model Loader v2 > Loader`
+**Node:** `VAE Loader Video+Audio [SML2]` — Category: `Smart Model Loader Nova > Loader`
 
 Loads a video/image VAE and a ComfyUI-supported audio VAE on separate sockets,
 using the same registered VAE folders as the single loader. ComfyUI performs

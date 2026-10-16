@@ -1,6 +1,6 @@
 # Smart Model Loader
 
-Add **Smart Model Loader [SML2]** from the Smart Model Loader v2 category. It has a
+Add **Smart Model Loader [SML2]** from the Smart Model Loader Nova category. It has a
 compact panel that works in classic canvas and Nodes 2.0. Its
 design is adapted from DaSiWa, with compact 11px Model Mode and Include bars.
 Include sits directly below Model Mode. The panel follows the node's
@@ -336,7 +336,7 @@ The Diffusers format is detected from tensor keys and shapes, independently of i
 
 ### Text Encode Qwen Image 2.1
 
-Find **Text Encode Qwen Image 2.1** under **Smart Model Loader v2 → Conditioning**. Its serialized ID is `Text Encode Qwen Image 2.1 [SML2]`.
+Find **Text Encode Qwen Image 2.1** under **Smart Model Loader Nova → Conditioning**. Its serialized ID is `Text Encode Qwen Image 2.1 [SML2]`.
 
 Connect `clip`, `vae`, `positive`, and `negative`, in that order. Both prompts are STRING sockets, with no prompt widgets. Connect a string-producing node for each prompt; an empty string is valid.
 
@@ -350,7 +350,7 @@ The outputs are **positive**, **negative**, and **latent**, forwarded directly f
 
 ## MiniMax Music 3
 
-Find **Text Encode MiniMax Music 3** under **Smart Model Loader v2 → Conditioning**.
+Find **Text Encode MiniMax Music 3** under **Smart Model Loader Nova → Conditioning**.
 Its serialized ID is `Text Encode MiniMax Music 3 [SML2]`.
 
 Connect a MiniMax Music 3 `clip`, then enter JSON in the multiline `song_json`
@@ -379,7 +379,7 @@ The caption/lyrics separation follows the
 
 ## Qwen Image 2.1 Scheduler
 
-Find **Qwen Image 2.1 Scheduler** under **Smart Model Loader v2 → Sampler**. It
+Find **Qwen Image 2.1 Scheduler** under **Smart Model Loader Nova → Sampler**. It
 produces `SIGMAS` directly and adds the same tensor to its output `PIPE` without
 mutating the input pipe. The loader's model-sampling override is optional for
 this path: explicit SIGMAS supply the schedule directly, so shifts are applied once.

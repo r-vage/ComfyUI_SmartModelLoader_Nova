@@ -1,7 +1,8 @@
 /** Local theme catalog and event-driven application; no cross-pack state. */
 export function createNodeDesign({ app, api, settingId, category, route, prefix, dataset,
     suffix, notice, nodeCategory = () => null, colorTitlesOnCreate = false }) {
-    let designs = {}, active = null, saved = 'jade', ready = false, synchronizing = false;
+    const defaultDesign = 'neutral';
+    let designs = {}, active = null, saved = defaultDesign, ready = false, synchronizing = false;
     let revision = 0, pending = Promise.resolve();
     const appliedTitles = new WeakMap();
     const decoratedTypes = new WeakSet();
@@ -72,12 +73,12 @@ export function createNodeDesign({ app, api, settingId, category, route, prefix,
 
     function applySaved() {
         if (Object.hasOwn(designs, saved)) return applyDesign(saved);
-        if (Object.hasOwn(designs, 'jade')) applyDesign('jade');
+        if (Object.hasOwn(designs, defaultDesign)) applyDesign(defaultDesign);
         notice(`Theme “${saved}” is unavailable. Restore its JSON file or select another design. The saved selection has not been changed.`);
     }
 
     const options = () => {
-        const choices = Object.entries(designs).sort(([a], [b]) => a === 'jade' ? -1 : b === 'jade' ? 1 : a.localeCompare(b))
+        const choices = Object.entries(designs).sort(([a], [b]) => a === defaultDesign ? -1 : b === defaultDesign ? 1 : a.localeCompare(b))
             .map(([value, design]) => ({ text: design.label, value }));
         if (!Object.hasOwn(designs, saved)) choices.push({ text: `Unavailable: ${saved}`, value: saved });
         return choices;
@@ -110,7 +111,7 @@ export function createNodeDesign({ app, api, settingId, category, route, prefix,
         return pending;
     }
     async function initialize(config = {}) {
-        saved = typeof config.node_design === 'string' ? config.node_design : 'jade';
+        saved = typeof config.node_design === 'string' ? config.node_design : defaultDesign;
         try { await readCatalog(); applySaved(); }
         catch (error) { notice(error.message); }
         const settings = app.ui.settings;

@@ -14,7 +14,7 @@ class TEXTS(Enum):
 
 
 class CATEGORY(Enum):
-    MAIN = "🌒 Smart Model Loader v2"
+    MAIN = "🌒 Smart Model Loader Nova"
     CONDITIONING = "/ Conditioning"
     CONVERSION = "/ Conversion"
     LOADER = "/ Loader"

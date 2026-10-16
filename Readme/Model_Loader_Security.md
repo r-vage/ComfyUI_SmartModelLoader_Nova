@@ -1,6 +1,6 @@
 # Model files, sources and integrity
 
-Smart Model Loader v2 keeps local file validation, per-resource source metadata
+Smart Model Loader Nova keeps local file validation, per-resource source metadata
 and verified downloading separate. The [Source / integrity visual tour](Download_Manager.md#visual-tour)
 shows how these controls work together in the loader and Download Manager.
 

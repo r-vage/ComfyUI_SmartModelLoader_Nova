@@ -1,12 +1,13 @@
 # Node designs
 
 Choose **Settings → SML2 → Appearance → Node design**. The setting belongs
-only to this repository and works in classic canvas and Nodes 2.0.
+only to this repository and works in classic canvas and Nodes 2.0. Neutral is
+the default for new installations; existing saved theme choices are preserved.
 
 | Bundled theme | Background | Controls |
 | --- | --- | --- |
-| Jade (default) | RGB 26,26,26 (`#1a1a1a`) | Jade accents, purple selection glow |
-| Neutral | RGB 58,58,58 (`#3a3a3a`) | Gray controls, no glow |
+| Jade | RGB 26,26,26 (`#1a1a1a`) | Jade accents, purple selection glow |
+| Neutral (default) | RGB 58,58,58 (`#3a3a3a`) | Gray controls, no glow |
 | Ocean | RGB 26,26,26 (`#1a1a1a`) | Blue accents and glow |
 | Amethyst | RGB 26,26,26 (`#1a1a1a`) | Purple accents and glow |
 | Amber | RGB 26,26,26 (`#1a1a1a`) | Warm yellow-gold (`#e8b978`) accents and glow, matching the Eclipse README tour |
@@ -28,6 +29,18 @@ It takes precedence over an older browser setting at startup and applies across
 workflows. Changes are event driven: no file watcher, recurring canvas scan or
 per-node theme request.
 
+## Theme files and updates
+
+Bundled palettes are shipped as `.defaults/themes/*.json.example`. Startup copies
+each default into the user-owned `themes/` folder once. Existing files are kept
+exactly as they are, including custom edits and malformed files. Updates do not
+replace a theme or restore a deleted one, even if the bundled default changes.
+A newly bundled filename can be installed once without restoring older deletions.
+
+The extraction record is `.theme-defaults.json` in this repository. Theme reloads
+only read files. To restore a removed palette, copy its `.json.example` from
+`.defaults/themes/` into `themes/` and remove the `.example` suffix yourself.
+
 ## Create or edit a theme
 
 1. Copy `themes/jade.json` (or another bundled theme) to
@@ -40,10 +53,10 @@ per-node theme request.
 
 The filename without `.json` is the saved ID. Use lowercase letters, digits,
 hyphens and underscores, with at most 64 characters. `label` is the displayed
-name. To customize a built-in theme without editing a shipped file, copy it to
-`themes/custom/` with its original filename; for example, `custom/jade.json`
-overrides `themes/jade.json`. Custom files are ignored by Git and preserved by
-updates. Reads never rewrite theme files.
+name. You can edit a theme directly in `themes/` or override it in `themes/custom/`
+with its original filename; for example, `custom/jade.json` overrides
+`themes/jade.json`. The whole `themes/` folder is ignored by Git. Reads never
+rewrite theme files.
 
 The same complete JSON format works in Eclipse Nova, SML2 and SmartLLM Nova.
 Copy a theme into each repo where you want it available and select it separately.
@@ -73,7 +86,7 @@ shadows, each with three nonnegative pixel lengths and a hex color, such as
 `0 0 10px #975bff99`. Arbitrary CSS and URLs are not accepted.
 
 Malformed, oversized or unsupported files are skipped with a visible message;
-valid themes remain available. If the selected file is missing or invalid, Jade
+valid themes remain available. If the selected file is missing or invalid, Neutral
 is shown temporarily without overwriting the saved selection. Restore the file
 and reload, or explicitly choose another theme. A malformed custom override
 leaves the bundled version available.

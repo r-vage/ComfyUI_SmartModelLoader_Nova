@@ -925,11 +925,11 @@ class StandaloneConfigEndpoints:
         @PromptServer.instance.routes.get("/smart-model-loader-v2/config/all")
         async def get_all_config(_request):
             hf_configured, hf_source = get_auth_token_status("huggingface")
-            node_design = get_config_value("node_design", "jade")
+            node_design = get_config_value("node_design", "neutral")
             return web.json_response(
                 {
                     "log_level": get_config_value("log_level", "warning"),
-                    "node_design": node_design if valid_design_id(node_design) else "jade",
+                    "node_design": node_design if valid_design_id(node_design) else "neutral",
                     "allow_legacy_model_formats": get_config_value(
                         "allow_legacy_model_formats", False,
                     ),

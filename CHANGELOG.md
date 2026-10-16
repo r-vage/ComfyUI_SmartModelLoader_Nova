@@ -1,5 +1,48 @@
 # Changelog
 
+## 2026-10-16
+
+### Version: 1.0.3
+
+- **Feat**
+  - Default new installations to Neutral, including the appearance selector and missing-theme display. Preserve saved theme choices during startup and default updates.
+  - Ship palettes under .defaults/themes and extract each into the user-owned themes folder once. Preserve existing files, edits and deletions across restarts and changed defaults, including installations with an older migration marker.
+- **Fix**
+  - Recognize the renamed Nova Python module when routing loader execution and validation error notifications.
+- **Chore**
+  - Rename the package and Add Node menu to Smart Model Loader Nova, update repository and icon URLs, and point the bundled workflow's repository hints to Nova. Existing [SML2] node IDs, SML2 settings and smart-model-loader-v2 APIs remain unchanged.
+- **Docs**
+  - Update installation commands, issue links and node-guide menu paths for the Nova repository. Explain restarting ComfyUI and reloading the browser after renaming an existing checkout.
+  - Document one-time theme extraction, direct palette edits and manual restoration of removed themes.
+- **Changed files**
+  - core/config_store.py
+  - core/server_endpoints.py
+  - js/node-design-theme.js
+  - .defaults/config.json.example
+  - Readme/Download_Manager.md
+  - core/theme_defaults.py
+  - core/migration.py
+  - js/smart-model-loader-error-notifications.js
+  - .gitignore
+  - .defaults/.manifest.json
+  - .defaults/themes/jade.json.example
+  - .defaults/themes/neutral.json.example
+  - .defaults/themes/ocean.json.example
+  - .defaults/themes/amethyst.json.example
+  - .defaults/themes/amber.json.example
+  - .defaults/themes/custom/README.md.example
+  - Readme/Node_Design.md
+  - core/keys.py
+  - pyproject.toml
+  - workflows/SML2.json
+  - README.md
+  - Readme/CLIP_Loader.md
+  - Readme/Component_Loaders.md
+  - Readme/KSampler_Pipe.md
+  - Readme/LoRA_Stack.md
+  - Readme/Model_Loader_Security.md
+  - Readme/Smart_Loaders.md
+
 ## 2026-10-15
 
 ### Version: 1.0.2
