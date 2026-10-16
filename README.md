@@ -6,11 +6,12 @@ option bars in classic canvas and Nodes 2.0.
 The design is adapted from DaSiWa, using dynamic controls to reduce widget and
 layout overhead.
 
-Choose **Settings → SML2 → General → Node design** for Jade (default), Neutral,
-Ocean or Amethyst. Jade, Ocean and Amethyst share a dark background with different
-control colors; Neutral keeps its lighter gray background. The selection covers
+Choose **Settings → SML2 → Appearance → Node design** for Jade (default), Neutral,
+Ocean, Amethyst, Amber or a custom JSON theme. Jade, Ocean, Amethyst and Amber
+share a dark background with different control colors; Neutral keeps its lighter
+gray background. The selection covers
 shared panels and Download Manager, saves in `config.json` and loads on startup.
-See [Node designs](Readme/Node_Design.md) for the palettes and scope.
+See [Node designs](Readme/Node_Design.md) for theme creation, reload and background precedence.
 
 Find this pack's nodes under **🌒 Smart Model Loader v2** in ComfyUI's Add Node
 menu, separate from the original **🌒 Smart Model Loader** category.
@@ -125,7 +126,7 @@ python -m pip install -r requirements.txt
 ```
 
 Restart ComfyUI, then open **Add Node → Smart Model Loader v2**. Settings appear
-under **SML2 → General** and use `SML2.*` IDs.
+under **SML2 → General** and **SML2 → Appearance**, using `SML2.*` IDs.
 
 Run the install command with ComfyUI's own Python environment. The requirements
 include `gguf>=0.13.0,<0.20` for the bundled GGUF loader, `packaging` for its

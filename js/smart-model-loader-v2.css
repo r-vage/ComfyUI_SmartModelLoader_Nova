@@ -1,7 +1,8 @@
+.sml-v2, .sml-v2-popup, .sml-v2-dialog { color-scheme: var(--sml2-design-color-scheme); }
 .sml-v2 {
     /* The native node body supplies the panel color in both DOM hosts. */
-    --sml-surface: transparent; --sml-row: #ffffff06; --sml-text: var(--sml2-design-text);
-    --sml-accent: var(--sml2-design-accent); --sml-divider: #ffffff14;
+    --sml-surface: transparent; --sml-row: var(--sml2-design-row-bg); --sml-text: var(--sml2-design-text);
+    --sml-accent: var(--sml2-design-accent); --sml-divider: var(--sml2-design-divider);
     font: 12px/1.4 Arial, sans-serif; color: var(--sml-text); background: var(--sml-surface);
     width: 100%; min-width: 0; border-radius: 7px; box-sizing: border-box;
     padding: 8px; overflow: hidden; user-select: text; container-type: inline-size;
@@ -95,12 +96,12 @@
 .sml-v2-ratio-icon { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; flex-shrink: 0; }
 .sml-v2-ratio-icon > span { display: block; border: 1px solid currentColor; border-radius: 1px; background: var(--sml2-design-ratio-bg); }
 .sml-v2-size-readout { padding-top: 6px; color: var(--sml2-design-select-text); font-size: 11px; text-align: right; }
-.sml-v2-size-readout.sml-v2-error { color: #ff9696; text-align: left; }
+.sml-v2-size-readout.sml-v2-error { color: var(--sml2-design-error); text-align: left; }
 /* A top-layer menu avoids the node panel's clipping and either host's transforms. */
 .sml-v2-popup {
     position: fixed; inset: auto; margin: 0; padding: 5px; overflow: auto;
     border: 1px solid var(--sml2-design-menu-border); border-radius: 6px; background: var(--sml2-design-menu-bg); color: var(--sml2-design-select-text);
-    box-shadow: 0 6px 20px #0008; font: 12px/1.4 Arial, sans-serif;
+    box-shadow: var(--sml2-design-menu-shadow); font: 12px/1.4 Arial, sans-serif;
     transform-origin: top left; box-sizing: border-box; overscroll-behavior: contain;
 }
 .sml-v2-popup:popover-open { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 4px; }
@@ -126,7 +127,7 @@
 .sml-v2-select-option[aria-selected="true"] { color: var(--sml2-design-accent); border-color: var(--sml2-design-menu-border); }
 .sml-v2-select-option:focus-visible { outline: 1px solid var(--sml2-design-accent); outline-offset: -1px; }
 .sml-v2-field { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-.sml-v2-field > span { color: #bbb; }
+.sml-v2-field > span { color: var(--sml2-design-label); }
 .sml-v2-field:has(input[type="checkbox"]) { flex-direction: row; align-items: center; justify-content: space-between; }
 .sml-v2-wide { grid-column: 1 / -1; }
 .sml-v2-seed { display: flex; align-items: center; gap: 4px; margin-top: 4px; }
@@ -150,24 +151,24 @@
 .sml-v2-row-main { display: flex; gap: 4px; align-items: center; min-height: 30px; min-width: 0; }
 .sml-v2-row-main > .sml-v2-file { flex: 1; width: 0; }
 .sml-v2-row-main .sml-v2-picker { padding: 5px 2px; border-color: transparent; background: transparent; }
-.sml-v2-row-main .sml-v2-picker:hover { background: #ffffff08; border-color: var(--sml2-design-input-border); }
-.sml-v2-row-main .sml-v2-picker[data-empty="true"] { color: #888; }
-.sml-v2-row[data-enabled="false"] .sml-v2-picker { color: #888; }
-.sml-v2-slot { flex: 0 0 22px; text-align: center; color: #888; font: 10px monospace; }
+.sml-v2-row-main .sml-v2-picker:hover { background: var(--sml2-design-option-bg); border-color: var(--sml2-design-input-border); }
+.sml-v2-row-main .sml-v2-picker[data-empty="true"] { color: var(--sml2-design-muted); }
+.sml-v2-row[data-enabled="false"] .sml-v2-picker { color: var(--sml2-design-muted); }
+.sml-v2-slot { flex: 0 0 22px; text-align: center; color: var(--sml2-design-muted); font: 10px monospace; }
 .sml-v2-row-actions { display: flex; gap: 3px; align-items: center; }
 .sml-v2-row-actions > button, .sml-v2 .sml-v2-row-toggle {
     flex: 0 0 22px; width: 22px; height: 24px; padding: 0; border-color: transparent; background: transparent;
 }
-.sml-v2 .sml-v2-row-toggle { color: #f44336; font-size: 14px; }
-.sml-v2 .sml-v2-row-toggle[aria-pressed="true"] { color: #4caf50; background: transparent; border-color: transparent; }
-.sml-v2 .sml-v2-row-toggle:hover { background: #ffffff0c; border-color: var(--sml2-design-input-border); }
+.sml-v2 .sml-v2-row-toggle { color: var(--sml2-design-danger); font-size: 14px; }
+.sml-v2 .sml-v2-row-toggle[aria-pressed="true"] { color: var(--sml2-design-success); background: transparent; border-color: transparent; }
+.sml-v2 .sml-v2-row-toggle:hover { background: var(--sml2-design-control-hover); border-color: var(--sml2-design-input-border); }
 .sml-v2-row-order { display: flex; flex-direction: column; }
-.sml-v2-row-order > button { padding: 0; width: 18px; height: 14px; font-size: 10px; line-height: 1; border: 0; background: transparent; color: #999; }
+.sml-v2-row-order > button { padding: 0; width: 18px; height: 14px; font-size: 10px; line-height: 1; border: 0; background: transparent; color: var(--sml2-design-muted); }
 .sml-v2-row-actions > .sml-v2-file-rename { border-color: var(--sml2-design-control-border); background: var(--sml2-design-control-bg); }
 .sml-v2-row-actions > .sml-v2-row-info { flex-basis: 18px; width: 18px; height: 18px; border: 1px solid var(--sml2-design-control-border); border-radius: 50%; font: 11px Georgia, serif; }
 .sml-v2-row-actions > .sml-v2-row-info[aria-expanded="true"] { border-color: var(--sml2-design-accent); background: var(--sml2-design-control-bg); }
-.sml-v2-row-actions > .sml-v2-row-remove { color: #f44336cc; font-size: 16px; }
-.sml-v2-row-actions > .sml-v2-row-remove:hover { background: #f4433618; }
+.sml-v2-row-actions > .sml-v2-row-remove { color: var(--sml2-design-danger); font-size: 16px; }
+.sml-v2-row-actions > .sml-v2-row-remove:hover { background: var(--sml2-design-control-hover); }
 .sml-v2-strength { flex: 0 0 60px; background: var(--sml2-design-option-bg); border: 1px solid var(--sml2-design-menu-border); border-radius: 3px; }
 .sml-v2-strength > label { gap: 0; padding: 1px 3px; }
 .sml-v2-strength > label > span { color: var(--sml2-design-control-strong); font: 8px/1.2 monospace; }
@@ -179,7 +180,7 @@
 .sml-v2-lora-footer > .sml-v2-note { flex: none; white-space: nowrap; }
 .sml-v2 .sml-v2-add { width: 100%; margin-top: 4px; font-size: 11px; padding: 3px 7px; }
 .sml-v2-note { font-size: 11px; color: var(--sml2-design-muted); overflow-wrap: anywhere; }
-.sml-v2-error { color: #ff9696; }
+.sml-v2-error { color: var(--sml2-design-error); }
 .sml-v2-status:empty { display: none; }
 .sml-v2-source { margin: 5px 0; }
 .sml-v2-source summary { cursor: pointer; color: var(--sml2-design-muted); }
@@ -188,7 +189,7 @@
     border-radius: 10px; padding: 14px; width: min(560px, 90vw); max-height: 80vh;
     box-shadow: var(--sml2-design-dialog-shadow);
 }
-.sml-v2-dialog::backdrop { background: #0008; }
+.sml-v2-dialog::backdrop { background: var(--sml2-design-backdrop); }
 .sml-v2-dialog header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .sml-v2-dialog h2 { margin: 0; font-size: 15px; }
 .sml-v2-rename-dialog p { overflow-wrap: anywhere; }
@@ -206,11 +207,11 @@
 .sml-v2-preset-save > button, .sml-v2-preset-row > button { flex-shrink: 0; }
 .sml-v2-preset-search { margin: 10px 0 4px; }
 .sml-v2-preset-search > input { flex: 1; min-width: 0; }
-.sml-v2-preset-row { padding: 3px; border-radius: 4px; background: #ffffff06; }
+.sml-v2-preset-row { padding: 3px; border-radius: 4px; background: var(--sml2-design-row-bg); }
 .sml-v2-preset-row > .sml-v2-preset-load { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .sml-v2-results button[aria-current="true"] { border-color: var(--sml2-design-accent); }
 .sml-v2-preset-delete-name { flex: 1; min-width: 0; overflow-wrap: anywhere; }
-.sml-v2-preset-row > .sml-v2-preset-delete { color: #ff9696; width: 28px; padding: 4px 0; }
+.sml-v2-preset-row > .sml-v2-preset-delete { color: var(--sml2-design-error); width: 28px; padding: 4px 0; }
 @container (max-width: 340px) {
     .sml-v2-fields { grid-template-columns: minmax(0, 1fr); }
     .sml-v2-sampler-values[data-flux="true"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }

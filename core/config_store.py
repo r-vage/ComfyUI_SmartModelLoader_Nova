@@ -31,7 +31,7 @@ def _fallback_config() -> dict[str, Any]:
         "_comments": {
             "description": "ComfyUI Smart Model Loader Configuration",
             "log_level_options": "error | warning | info | debug",
-            "node_design": "Node and Download Manager design: jade | neutral | ocean | amethyst.",
+            "node_design": "Theme filename (without .json) from this repo's themes/ or themes/custom/ folder.",
             "allow_legacy_model_formats": "Administrator-local override for pickle-capable .ckpt/.pt/.pth/.bin diffusion artifacts. Keep false unless the files are trusted.",
         },
         "log_level": "warning",

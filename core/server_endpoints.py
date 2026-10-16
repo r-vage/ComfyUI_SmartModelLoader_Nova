@@ -56,9 +56,9 @@ from .model_loader.validation import (
     LEGACY_MODEL_EXTENSIONS,
     SAFE_TENSOR_EXTENSIONS,
 )
+from .node_designs import available_node_design, load_node_designs, valid_design_id
 
 _MODEL_IO_SEMAPHORE = asyncio.Semaphore(2)
-_NODE_DESIGNS = ("jade", "neutral", "ocean", "amethyst")
 
 # Detect ComfyUI native dynamic VRAM:
 # 0.18.x: ModelPatcher gained 'model_mmap_residency'
@@ -918,6 +918,10 @@ class StandaloneConfigEndpoints:
     def _register_endpoints(self) -> None:
         from .credentials import get_auth_token_status
 
+        @PromptServer.instance.routes.get("/smart-model-loader-v2/themes")
+        async def get_node_designs(_request):
+            return web.json_response(load_node_designs(), headers={"Cache-Control": "no-store"})
+
         @PromptServer.instance.routes.get("/smart-model-loader-v2/config/all")
         async def get_all_config(_request):
             hf_configured, hf_source = get_auth_token_status("huggingface")
@@ -925,7 +929,7 @@ class StandaloneConfigEndpoints:
             return web.json_response(
                 {
                     "log_level": get_config_value("log_level", "warning"),
-                    "node_design": node_design if node_design in _NODE_DESIGNS else "jade",
+                    "node_design": node_design if valid_design_id(node_design) else "jade",
                     "allow_legacy_model_formats": get_config_value(
                         "allow_legacy_model_formats", False,
                     ),
@@ -964,7 +968,7 @@ class StandaloneConfigEndpoints:
                             {"success": False, "error": "Invalid log level"}, status=400,
                         )
                 elif key == "node_design":
-                    if not isinstance(value, str) or value not in _NODE_DESIGNS:
+                    if not available_node_design(value):
                         return web.json_response(
                             {"success": False, "error": "Invalid node design"}, status=400,
                         )

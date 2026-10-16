@@ -1,5 +1,39 @@
 # Changelog
 
+## 2026-10-15
+
+### Version: 1.0.2
+
+- **Feat**
+  - Load node designs from editable JSON palettes. Add custom themes and built-in overrides through themes/custom, with a Reload themes action under SML2 → Appearance.
+  - Add Amber with warm yellow-gold controls and selection glow matched to the Eclipse README tour, on an RGB 26,26,26 background.
+- **Fix**
+  - Apply the selected background to all SML2 nodes, replacing custom or stale workflow backgrounds in classic canvas and Nodes 2.0
+- **Refactor**
+  - Use theme tokens throughout panel controls, menus, preset dialogs and Download Manager.
+- **Docs**
+  - Explain theme creation, custom overrides, reload and background precedence.
+
+- **Changed files**
+  - core/node_designs.py
+  - core/config_store.py
+  - core/server_endpoints.py
+  - js/node-design-theme.js
+  - js/smart-model-loader-design.js
+  - js/smart-model-loader-v2.css
+  - js/smart-model-loader-download-manager.js
+  - .defaults/config.json.example
+  - themes/jade.json
+  - themes/neutral.json
+  - themes/ocean.json
+  - themes/amethyst.json
+  - themes/amber.json
+  - themes/custom/README.md
+  - pyproject.toml
+  - Readme/Node_Design.md
+  - README.md
+  - Readme/Download_Manager.md
+
 ## 2026-10-12
 
 ### Version: 1.0.1
@@ -9,6 +43,7 @@
   - Save the design in private config.json and load it on startup. Jade, Ocean and Amethyst share RGB 26,26,26 node/dialog backgrounds with different control colors. Neutral keeps RGB 58,58,58, gray controls and no glow. Preserve node title colors, custom backgrounds and workflow values, with independent settings and styling for this pack.
 - **Docs**
   - Document the design presets, settings location and Download Manager appearance.
+
 - **Changed files**
   - core/config_store.py
   - core/server_endpoints.py
