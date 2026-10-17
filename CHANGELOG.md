@@ -1,5 +1,46 @@
 # Changelog
 
+## 2026-10-17
+
+### Version: 1.0.4
+
+- **Fix**
+  - Keep Smart Model Loader denoise with each node when applying presets, including zero, disabled Sampler drafts and workflow restore. Preset saves omit denoise, and older stored values are ignored while other sampler settings still apply.
+- **Chore**
+  - Remove denoise from all 22 bundled model presets and refresh their default manifest hashes.
+- **Docs**
+  - Clarify which settings presets save and which remain with the node in the preset dialog and loader guides.
+- **Changed files**
+  - core/model_loader/configuration.py
+  - js/smart-model-loader-v2-state.js
+  - js/smart-model-loader-v2-ui.js
+  - .defaults/.manifest.json
+  - .defaults/templates/Anima_Animij_S1.json.example
+  - .defaults/templates/Anima_Animij_ai.json.example
+  - .defaults/templates/Flux2_Klein-9B_Fluxtrait_v2.json.example
+  - .defaults/templates/Flux2_Klein-9B_Fluxtrait_v3.json.example
+  - .defaults/templates/Flux2_Klein-9B_KV.json.example
+  - .defaults/templates/Flux_Dev.json.example
+  - .defaults/templates/Flux_Dev_Nunchaku.json.example
+  - .defaults/templates/Flux_Fluxmania_Legacy_Nunchaku.json.example
+  - .defaults/templates/Flux_Kontext.json.example
+  - .defaults/templates/Flux_Kontext_Nunchaku.json.example
+  - .defaults/templates/Flux_Kreamania.json.example
+  - .defaults/templates/Illustrious_Animij_v8.json.example
+  - .defaults/templates/Illustrious_UnholyDesireMix_v8.json.example
+  - .defaults/templates/Krea2_Kreamania_v7d.json.example
+  - .defaults/templates/Krea2_Kreamania_v8b.json.example
+  - .defaults/templates/Krea2_Luc_Anime_v1.json.example
+  - .defaults/templates/Krea2_MoodyMix_v8.json.example
+  - .defaults/templates/Krea2_Turbo_BF16.json.example
+  - .defaults/templates/NoobAI_OneObsession.json.example
+  - .defaults/templates/Qwen Image 2.1_Final Cut_Int8.json.example
+  - .defaults/templates/Qwen Image 2.1_Redqw21-Unlocked_v2.json.example
+  - .defaults/templates/ZIT_BF16.json.example
+  - README.md
+  - Readme/Smart_Loaders.md
+  - pyproject.toml
+
 ## 2026-10-16
 
 ### Version: 1.0.3

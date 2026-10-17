@@ -49,7 +49,6 @@
   "sampler": {
     "steps": 10,
     "cfg": 1,
-    "denoise": 1,
     "sampler_name": "euler",
     "scheduler": "simple",
     "flux_guidance": 3.5

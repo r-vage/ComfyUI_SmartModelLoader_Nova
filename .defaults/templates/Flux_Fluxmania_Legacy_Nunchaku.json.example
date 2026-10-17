@@ -66,7 +66,6 @@
   "sampler": {
     "steps": 20,
     "cfg": 1,
-    "denoise": 1,
     "sampler_name": "dpmpp_2m",
     "scheduler": "sgm_uniform",
     "flux_guidance": 2.5

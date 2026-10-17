@@ -23,7 +23,6 @@
   "sampler": {
     "steps": 30,
     "cfg": 7.5,
-    "denoise": 1,
     "sampler_name": "ddim",
     "scheduler": "normal"
   }

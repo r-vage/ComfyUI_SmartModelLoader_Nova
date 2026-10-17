@@ -397,7 +397,12 @@ def validate_configuration(raw, *, spec=None, require_files=False, preset=False,
                   "scheduler": choice("Scheduler", spec["schedulers"])}
         if supports_flux(config):
             fields["flux_guidance"] = number("Flux guidance", 3.5, 0, 1000, 0.01)
+        if preset and isinstance(config["sampler"], dict) and "denoise" not in config["sampler"]:
+            fields.pop("denoise")
         validate_fields(config["sampler"], fields, path="sampler")
+        if preset:
+            # Validate older presets, but denoise is node-local runtime state.
+            config["sampler"].pop("denoise", None)
     if "modelSampling" in config:
         sampling = config["modelSampling"]
         object_fields(sampling, ["method", "parameters"], ["dimensions"], path="modelSampling")

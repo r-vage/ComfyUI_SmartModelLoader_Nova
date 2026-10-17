@@ -23,7 +23,6 @@
   "sampler": {
     "steps": 30,
     "cfg": 5,
-    "denoise": 1,
     "sampler_name": "euler_ancestral",
     "scheduler": "sgm_uniform"
   }

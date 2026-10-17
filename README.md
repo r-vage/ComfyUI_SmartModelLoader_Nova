@@ -64,7 +64,7 @@ in the Eclipse tour style. The same controls are available in classic canvas.
 
 Smart Loader and LoRA presets apply only when selected. Their panels support
 search, a remembered save name, overwrite and deletion. Workflows retain their
-own settings. Smart Loader presets exclude Latent, Advanced settings and seeds.
+own settings. Smart Loader presets exclude denoise, Latent, Advanced settings and seeds.
 Smart Loader presets use `templates/`; LoRA presets use `templates/lora-stack/`.
 The pack includes 22 model presets. First setup copies missing presets into
 `templates/` and records completion in `.eclipse_loader_data_migrated`. Existing

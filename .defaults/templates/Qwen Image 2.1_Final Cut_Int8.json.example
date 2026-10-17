@@ -48,7 +48,6 @@
   "sampler": {
     "steps": 25,
     "cfg": 1,
-    "denoise": 1,
     "sampler_name": "euler",
     "scheduler": "normal"
   }

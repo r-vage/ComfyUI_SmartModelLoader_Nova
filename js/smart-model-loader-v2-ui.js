@@ -709,7 +709,7 @@ export class LoaderForm {
         const dialog = this.openDialog('Loader presets'); dialog.classList.add('sml-v2-presets');
         dialog.append(element('p', 'sml-v2-note', this.spec.profile === 'lora'
             ? 'Presets save the mode and all rows, including bypass state and strengths. Local integrity stays with each node.'
-            : 'Presets include enabled LoRAs. Latent, Advanced settings and seeds stay with each node.'));
+            : 'Presets include enabled LoRAs. Denoise, Latent, Advanced settings and seeds stay with each node.'));
         this.presetConversionHint(dialog);
         const label = element('label', '', 'Preset name'); const name = document.createElement('input');
         name.setAttribute('aria-label', 'Preset name'); name.maxLength = 128;

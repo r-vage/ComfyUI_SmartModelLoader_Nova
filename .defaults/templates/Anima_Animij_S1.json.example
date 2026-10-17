@@ -42,7 +42,6 @@
   "sampler": {
     "steps": 32,
     "cfg": 6,
-    "denoise": 1,
     "sampler_name": "dpmpp_2m_sde",
     "scheduler": "sgm_uniform"
   },

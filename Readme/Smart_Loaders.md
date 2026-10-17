@@ -210,12 +210,15 @@ Expose `flux_guidance` through IO Checkpoint Loader, connect it to a
 KSampler Pipe consumes its sampler settings but does not apply guidance for you.
 
 Presets save model settings and enabled sections under `templates/`, including
-denoise, resource references, encoder arrays, and enabled LoRAs with their strengths.
-**Latent, Advanced settings and seeds are excluded.** Applying a preset keeps the
-current node's latent settings, memory cleanup, block swap, local integrity, seed
+resource references, encoder arrays, and enabled LoRAs with their strengths.
+**Denoise, Latent, Advanced settings and seeds are excluded.** Applying a preset keeps the
+current node's denoise, latent settings, memory cleanup, block swap, local integrity, seed
 value/mode, and last-used seed. Disabled Latent and Seed stay disabled and retain
 their drafts. Earlier templates containing Latent remain readable, but their
 latent settings are ignored and removed only when the user saves them again.
+Denoise is also retained while Sampler is disabled or removed by a preset; the
+other sampler settings still come from the preset. Stored denoise in earlier
+presets is ignored on load and omitted on the next save. Bundled presets exclude it.
 Flux and Qwen model sampling use the current runtime latent when enabled. With
 Latent disabled, a preset's explicit sampling dimensions apply; otherwise the
 node keeps its previous sampling size, defaulting to 1024 × 1024 on a new node.

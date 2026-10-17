@@ -106,13 +106,19 @@ export class LoaderState extends SeedState {
         return Object.fromEntries(Object.entries(this.spec.features)
             .filter(([key]) => !['clip', 'vae', 'audioVae'].includes(key) || this.sourcesFor(key).length));
     }
+    get denoise() {
+        return this.config.sampler?.denoise ?? this.editor.disabled.sampler?.denoise
+            ?? this.editor.denoise ?? this.spec.sampler.denoise.default;
+    }
     preset() {
         const value = clone(this.config);
         for (const key of NODE_LOCAL_FIELDS) delete value[key];
+        if (value.sampler) delete value.sampler.denoise;
         return value;
     }
     withPreset(value, name = '') {
         const config = clone(value);
+        if (config.sampler) config.sampler.denoise = this.denoise;
         for (const key of NODE_LOCAL_FIELDS) {
             if (Object.hasOwn(this.config, key)) config[key] = clone(this.config[key]);
             else delete config[key];
@@ -120,7 +126,9 @@ export class LoaderState extends SeedState {
         // Presets replace settings, while existing visible sections keep their
         // disclosure state. A newly included section must start collapsed.
         const remainsVisible = key => ['modelOptions', 'advanced'].includes(key) || (this.config[key] && config[key]);
-        const editor = { disabled: {}, presetName: name, open: remainsVisible(this.editor.open) ? this.editor.open : null,
+        // Keep denoise even when the preset removes Sampler and its disabled draft.
+        const editor = { disabled: {}, denoise: this.denoise, presetName: name,
+            open: remainsVisible(this.editor.open) ? this.editor.open : null,
             pinned: this.editor.pinned.filter(remainsVisible) };
         for (const key of ['collapsedBars', 'blockSwap', 'lastSeed', 'latentSizing', 'samplingDimensions']) {
             if (Object.hasOwn(this.editor, key)) editor[key] = clone(this.editor[key]);
@@ -152,7 +160,7 @@ export class LoaderState extends SeedState {
             case 'audioVae': return { source: 'external', resource: { name: '' } };
             case 'loras': return { entries: [] };
             case 'latent': return { ...defaults(this.spec.latent), sizing: clone(this.spec.latentSizing.default) };
-            case 'sampler': return { ...defaults(this.spec.sampler), sampler_name: this.spec.samplers[0],
+            case 'sampler': return { ...defaults(this.spec.sampler), denoise: this.denoise, sampler_name: this.spec.samplers[0],
                 scheduler: this.spec.schedulers[0], ...(supportsFlux(this.config) ? { flux_guidance: 3.5 } : {}) };
             case 'modelSampling': return { method: 'None', parameters: {} };
             case 'seed': return { value: '0', policy: 'fixed' };
