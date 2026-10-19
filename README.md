@@ -9,7 +9,8 @@ layout overhead.
 Choose **Settings → SML2 → Appearance → Node design** for Neutral (default), Jade,
 Ocean, Amethyst, Amber or a custom JSON theme. Jade, Ocean, Amethyst and Amber
 share a dark background with different control colors; Neutral keeps its lighter
-gray background. The selection covers
+gray background. **Neutral Jade, Neutral Ocean, Neutral Amethyst and Neutral
+Amber** combine that lighter background and title with colored controls. The selection covers
 shared panels and Download Manager, saves in `config.json` and loads on startup.
 See [Node designs](Readme/Node_Design.md) for theme creation, reload and background precedence.
 Bundled themes are extracted once from `.defaults/themes/` into the user-owned
