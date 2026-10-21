@@ -77,7 +77,7 @@ export class LoraForm extends LoaderForm {
             for (const [key, label, caption] of fields) {
                 const field = element('div', 'sml-v2-strength sml-v2-lora-strength'); main.insertBefore(field, actions);
                 const input = this.input(field, `${row.id}.${key}`, label, row[key], value => { row[key] = value; },
-                    { type: 'number', min: -100, max: 100, step: .01 });
+                    { type: 'number', min: -100, max: 100, step: 0.1 });
                 input.parentElement.firstElementChild.textContent = caption;
                 input.title = `${label}; set to 0 to skip this target`;
             }

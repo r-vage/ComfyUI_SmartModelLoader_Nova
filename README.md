@@ -24,7 +24,7 @@ The main nodes are **Smart Model Loader [SML2]**, **CLIP Loader [SML2]**,
 Smart Model Loader can be configured for model-only loading.
 
 
-[![ComfyUI tested on 0.38.0](https://img.shields.io/badge/ComfyUI-tested%200.38.0-orange)](https://github.com/comfyanonymous/ComfyUI)
+[![ComfyUI tested on 0.38.0](https://img.shields.io/badge/ComfyUI-tested%200.42.1-orange)](https://github.com/comfyanonymous/ComfyUI)
 [![Platform](https://img.shields.io/badge/tested-Linux%20Mint%2022.3-blue)](https://linuxmint.com/)
 [![GPU](https://img.shields.io/badge/tested-RTX%204070%20Ti%20SUPER%20(SM89)-76b900)](https://www.nvidia.com/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green)](LICENSE)

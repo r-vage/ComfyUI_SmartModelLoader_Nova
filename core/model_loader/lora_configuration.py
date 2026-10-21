@@ -43,7 +43,7 @@ def validate_lora_configuration(raw, *, require_files=False, preset=False):
     for index, row in enumerate(rows):
         label = f"LoRA {index + 1}"
         fields = {"enabled": boolean("Enabled", True),
-                  **{key: number("Strength", 1.0, -100, 100, .01)
+                  **{key: number("Strength", 1.0, -100, 100, 0.1)
                      for key in ("strength", "clipStrength", "audioStrength")}}
         object_fields(row, ["id", "resource", *fields], path=label)
         validate_fields({key: row[key] for key in fields}, fields, path=label)

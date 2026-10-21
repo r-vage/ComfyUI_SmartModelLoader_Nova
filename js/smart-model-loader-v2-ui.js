@@ -367,7 +367,7 @@ export class LoaderForm {
         const numbers = element('div', 'sml-v2-sampler-values');
         numbers.dataset.flux = String(flux);
         const fields = { ...this.spec.sampler };
-        if (flux) fields.flux_guidance = { label: 'Flux guidance', min: 0, max: 1000, step: .01 };
+        if (flux) fields.flux_guidance = { label: 'Flux guidance', min: 0, max: 1000, step: 0.1 };
         for (const [key, field] of Object.entries(fields)) {
             this.input(numbers, `sampler.${key}`, field.label, value[key], number => { value[key] = number; },
                 { type: 'number', min: field.min, max: field.max, step: field.step });
@@ -509,7 +509,7 @@ export class LoaderForm {
             remove.className = 'sml-v2-row-remove'; actions.append(remove);
             const strength = element('div', 'sml-v2-strength');
             const input = this.input(strength, `${row.id}.strength`, 'Strength', row.strength, value => { row.strength = value; },
-                { type: 'number', min: -100, max: 100, step: .01 });
+                { type: 'number', min: -100, max: 100, step: 0.1 });
             input.parentElement.firstElementChild.textContent = 'STR'; input.title = 'LoRA strength';
             main.insertBefore(strength, actions);
         }

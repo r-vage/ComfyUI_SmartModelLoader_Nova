@@ -67,7 +67,7 @@ MODES = {
     }},
     "nunchaku-flux": {"label": "Nunchaku Flux", "role": "diffusion_models", "options": {
         "data_type": choice("Data type", ["bfloat16", "float16"]),
-        "cache_threshold": number("Cache threshold", 0.0, 0, 1, 0.01),
+        "cache_threshold": number("Cache threshold", 0.0, 0, 1, 0.1),
         "attention": choice("Nunchaku attention", ["flash-attention2", "nunchaku-fp16"]),
         "i2f_mode": choice("i2f mode", ["enabled", "always"]),
         "cpu_offload": OFFLOAD,
@@ -80,8 +80,8 @@ MODES = {
     "nunchaku-zimage": {"label": "Nunchaku ZImage", "role": "diffusion_models", "options": {}},
 }
 
-SHIFT = number("Shift", 3.0, 0, 100, 0.01)
-BASE_SHIFT = number("Base shift", 0.5, 0, 100, 0.01)
+SHIFT = number("Shift", 3.0, 0, 100, 0.1)
+BASE_SHIFT = number("Base shift", 0.5, 0, 100, 0.1)
 SIGMA = {
     "sigma_min": number("Sigma minimum", 0.002, 0, 1000, 0.001),
     "sigma_max": number("Sigma maximum", 120.0, 0, 1000, 0.001),
@@ -90,9 +90,9 @@ SAMPLING = {
     "None": {},
     "SD3": {"shift": SHIFT},
     "AuraFlow": {"shift": number("Shift", 1.73, 0, 100, 0.01)},
-    "Stable Cascade": {"shift": number("Shift", 2.0, 0, 100, 0.01)},
+    "Stable Cascade": {"shift": number("Shift", 2.0, 0, 100, 0.1)},
     "Flux": {"base_shift": BASE_SHIFT, "shift": number("Max shift", 1.15, 0, 100, 0.01)},
-    "Qwen Image 2.1": {"base_shift": BASE_SHIFT, "shift": number("Max shift", 0.9, 0, 100, 0.01)},
+    "Qwen Image 2.1": {"base_shift": BASE_SHIFT, "shift": number("Max shift", 0.9, 0, 100, 0.1)},
     "LCM": {"original_timesteps": number("Original timesteps", 50, 1, 1000), "zsnr": boolean("Zero-terminal SNR")},
     "ContinuousEDM": {
         "sampling_subtype": choice("Subtype", ["eps", "v_prediction", "edm", "edm_playground_v2.5", "cosmos_rflow"]),
@@ -118,13 +118,13 @@ LATENT_SIZING = {
     "divisors": [8, 16, 32, 64],
     "divisor": number("Divisible by", 32, 1, 32768),
     "ratio": number("Ratio", 1, 0.01, 10000, 0.01),
-    "megapixels": number("Megapixels", 1, 0.000256, MAX_LATENT_PIXELS / 1_000_000, 0.01),
+    "megapixels": number("Megapixels", 1, 0.000256, MAX_LATENT_PIXELS / 1_000_000, 0.000001),
     "default": {"mode": "preset", "resolution": "square-1024", "aspect": "1:1", "divisor": 32},
     "maxPixels": MAX_LATENT_PIXELS,
 }
 SAMPLER = {
-    "steps": number("Steps", 20, 1, 10000), "cfg": number("CFG", 8.0, 0, 1000, 0.01),
-    "denoise": number("Denoise", 1.0, 0, 1, 0.01),
+    "steps": number("Steps", 20, 1, 10000), "cfg": number("CFG", 8.0, 0, 1000, 0.1),
+    "denoise": number("Denoise", 1.0, 0, 1, 0.1),
 }
 BLOCK_SWAP = {"blocks_to_swap": number("Blocks to swap", 10, 0, 100),
               "offload_embeddings": boolean("Offload embeddings")}
@@ -396,7 +396,7 @@ def validate_configuration(raw, *, spec=None, require_files=False, preset=False,
         fields = {**SAMPLER, "sampler_name": choice("Sampler", spec["samplers"]),
                   "scheduler": choice("Scheduler", spec["schedulers"])}
         if supports_flux(config):
-            fields["flux_guidance"] = number("Flux guidance", 3.5, 0, 1000, 0.01)
+            fields["flux_guidance"] = number("Flux guidance", 3.5, 0, 1000, 0.1)
         if preset and isinstance(config["sampler"], dict) and "denoise" not in config["sampler"]:
             fields.pop("denoise")
         validate_fields(config["sampler"], fields, path="sampler")
@@ -457,7 +457,7 @@ def validate_rows(entries, *, path, require_files, loras=False):
         resource(entry["resource"], path=label, require_name=require_files)
         if loras:
             validate_fields({"strength": entry["strength"]},
-                            {"strength": number("Strength", 1.0, -100, 100, 0.01)}, path=label)
+                            {"strength": number("Strength", 1.0, -100, 100, 0.1)}, path=label)
 
 
 def supports_flux(config):

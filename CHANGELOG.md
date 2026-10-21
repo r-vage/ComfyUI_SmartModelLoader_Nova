@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026-10-21
+
+### Version: 1.0.6
+
+- **Fix**
+  - Use 0.1 increments for general float controls, retaining finer precision where defaults or bounds require it. Preserve saved values and value ranges.
+  - Keep fractional model-sampling shifts, aspect ratios and Qwen scheduler controls at hundredth precision; align megapixel controls with their exact minimum so defaults remain valid.
+- **Changed files**
+  - py/RvSampler_QwenImage21Scheduler.py
+  - py/RvCond_CLIPTextEncodeAdvanced.py
+  - core/model_loader/configuration.py
+  - core/model_loader/lora_configuration.py
+  - js/smart-model-loader-v2-ui.js
+  - js/smart-model-loader-v2-lora.js
+  - pyproject.toml
+
 ## 2026-10-19
 
 ### Version: 1.0.5

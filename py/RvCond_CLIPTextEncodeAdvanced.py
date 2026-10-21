@@ -153,7 +153,7 @@ class RvCond_CLIPTextEncodeAdvanced(io.ComfyNode):
                     default=1.0,
                     min=-1000.0,
                     max=1000.0,
-                    step=0.01,
+                    step=0.1,
                     tooltip="Global strength multiplier applied to the conditioning embedding tensor. Values > 1.0 amplify prompt influence; < 1.0 reduce it.",
                 ),
                 io.Boolean.Input(
