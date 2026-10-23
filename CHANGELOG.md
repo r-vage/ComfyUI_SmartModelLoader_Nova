@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-10-22
+
+### Version: 1.0.7
+
+- **Fix**
+  - Preserve manually chosen widths when expanding or collapsing loader, CLIP, LoRA and sampler bars or sections. Keep automatic control heights and the sampler preview height behavior.
+- **Changed files**
+  - js/smart-model-loader-v2.js
+  - pyproject.toml
+
 ## 2026-10-21
 
 ### Version: 1.0.6

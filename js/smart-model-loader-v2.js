@@ -59,7 +59,7 @@ class LoaderController {
             hideOnZoom: false, serialize: true, margin: 0,
         });
         this.widget.serializeValue = () => this.value();
-        this.widget.computeSize = () => [320, this.height];
+        this.widget.computeSize = () => [this.node.size[0], this.height];
         const Form = { clip: ClipForm, lora: LoraForm, sampler: SamplerForm }[this.spec.profile] ?? LoaderForm;
         this.form = new Form({ root: this.root, getState: () => this.state,
             edit: (fn, render = true) => this.edit(fn, render), catalog: () => this.catalog,
@@ -203,7 +203,7 @@ class LoaderController {
             this.root.style.setProperty('--comfy-widget-height', `${height}px`);
             this.root.style.setProperty('--comfy-widget-min-height', `${height}px`);
             this.root.style.setProperty('--comfy-widget-max-height', `${height}px`);
-            const width = Math.max(320, this.node.size[0]);
+            const width = this.node.size[0];
             const minimumHeight = this.node.computeSize()[1];
             // Wrapping sampler controls must not reset a manually sized preview
             // or compete with the native resize handle. Grow only if necessary.
