@@ -116,14 +116,14 @@ class RvPipe_IO_CheckpointLoader(io.ComfyNode):
     def execute(cls, pipe=None, **kwargs) -> io.NodeOutput:
         ctx = new_context(pipe, **kwargs)
 
-        # Derive width/height from latent when not explicitly set
+        # Spatial axes are last in both [B,C,H,W] and [B,C,T,H,W] latents.
         latent = ctx.get("latent")
         if latent is not None and isinstance(latent, dict) and "samples" in latent:
             latent_shape = latent["samples"].shape
             downscale = latent.get("downscale_ratio_spacial", DEFAULT_DOWNSCALE)
             if ctx.get("height") is None:
-                ctx["height"] = latent_shape[2] * downscale
+                ctx["height"] = latent_shape[-2] * downscale
             if ctx.get("width") is None:
-                ctx["width"] = latent_shape[3] * downscale
+                ctx["width"] = latent_shape[-1] * downscale
 
         return io.NodeOutput(*get_context_return_tuple(ctx))

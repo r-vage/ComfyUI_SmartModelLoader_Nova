@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-10-25
+
+### Version: 1.0.8
+
+- **Fix**
+  - Read IO Checkpoint Loader width and height from the spatial axes of both 4D and 5D latents. Preserve connected dimensions and existing pipe settings instead of treating the frame count as image height.
+- **Changed files**
+  - py/RvPipe_IO_CheckpointLoader.py
+  - pyproject.toml
+
 ## 2026-10-22
 
 ### Version: 1.0.7
