@@ -45,6 +45,7 @@ MIN_FREE_RESERVE_BYTES = 64 * 1024 * 1024
 MAX_METADATA_BYTES = 2 * 1024 * 1024
 MAX_MODEL_PAGE_BYTES = 8 * 1024 * 1024
 MAX_MODEL_PAGE_REDIRECTS = 2
+MAX_FILENAME_BYTES = 240
 
 
 class CivitaiResolvedFile(TypedDict):
@@ -345,6 +346,59 @@ def _request_model_page_payload(
     return payload
 
 
+def _safe_author_filename(value: object, source_filename: str) -> str | None:
+    if not isinstance(value, str):
+        return None
+    name = value.strip()
+    if (
+        not name
+        or name in {".", ".."}
+        or "\0" in name
+        or "/" in name
+        or "\\" in name
+        or len(name.encode("utf-8")) > MAX_FILENAME_BYTES
+        or PurePosixPath(name).suffix.casefold() != PurePosixPath(source_filename).suffix.casefold()
+    ):
+        return None
+    return name
+
+
+def _preferred_filename_from_public_api(
+    *,
+    model_id: int,
+    version_id: int,
+    file_id: int,
+    expected_sha256: str,
+    source_filename: str,
+    api_key: str | None,
+) -> str | None:
+    # Unlike REST version.files[].name, the public mini endpoint retains the
+    # uploaded filename. Pin the file: its default can select another precision.
+    version_id = _integer(version_id, "model-version identity")
+    file_id = _integer(file_id, "file identity")
+    try:
+        payload = _request_json(
+            f"{_BASE_URL}/api/v1/model-versions/mini/{version_id}?modelFileId={file_id}",
+            api_key,
+        )
+    except (OSError, TypeError, ValueError, requests.RequestException) as error:
+        log.debug(_LOG_PREFIX, f"Public filename lookup unavailable: {type(error).__name__}")
+        return None
+    air = payload.get("air")
+    identity = parse_air(air) if isinstance(air, str) else None
+    if not identity or (
+        identity.get("model_id"), identity.get("version_id"), identity.get("file_id"),
+    ) != (model_id, version_id, file_id):
+        return None
+    hashes = payload.get("hashes")
+    digest = hashes.get("SHA256") if isinstance(hashes, dict) else None
+    if not _valid_sha(digest) or not hmac.compare_digest(
+        digest.strip().casefold(), expected_sha256.strip().casefold(),
+    ):
+        return None
+    return _safe_author_filename(payload.get("fileName"), source_filename)
+
+
 def _preferred_filename_from_page_payload(
     payload: dict[str, Any],
     *,
@@ -363,7 +417,6 @@ def _preferred_filename_from_page_payload(
     queries = trpc_json.get("queries") if isinstance(trpc_json, dict) else None
     if not isinstance(queries, list):
         return None
-    source_suffix = PurePosixPath(source_filename).suffix.casefold()
     for query in queries:
         if not isinstance(query, dict):
             continue
@@ -410,19 +463,8 @@ def _preferred_filename_from_page_payload(
                     expected_sha256.casefold(),
                 ):
                     continue
-                name = file_data.get("name")
-                if not isinstance(name, str):
-                    continue
-                preferred = name.strip()
-                if (
-                    not preferred
-                    or preferred in {".", ".."}
-                    or "\0" in preferred
-                    or "/" in preferred
-                    or "\\" in preferred
-                    or len(preferred.encode("utf-8")) > 240
-                    or PurePosixPath(preferred).suffix.casefold() != source_suffix
-                ):
+                preferred = _safe_author_filename(file_data.get("name"), source_filename)
+                if preferred is None:
                     continue
                 duplicate_name = any(
                     isinstance(other, dict)
@@ -446,14 +488,26 @@ def _preferred_filename_for_file(
     source_filename: str,
     api_key: str | None,
 ) -> str | None:
-    payload = _request_model_page_payload(model_id, version_id, api_key)
-    return _preferred_filename_from_page_payload(
-        payload,
+    preferred = None
+    try:
+        payload = _request_model_page_payload(model_id, version_id, api_key)
+        preferred = _preferred_filename_from_page_payload(
+            payload,
+            model_id=model_id,
+            version_id=version_id,
+            file_id=file_id,
+            expected_sha256=expected_sha256,
+            source_filename=source_filename,
+        )
+    except (OSError, TypeError, ValueError, requests.RequestException) as error:
+        log.debug(_LOG_PREFIX, f"Preferred filename lookup unavailable: {type(error).__name__}")
+    return preferred or _preferred_filename_from_public_api(
         model_id=model_id,
         version_id=version_id,
         file_id=file_id,
         expected_sha256=expected_sha256,
         source_filename=source_filename,
+        api_key=api_key,
     )
 
 
@@ -581,7 +635,7 @@ def resolve_civitai_version_filenames(
     version: dict[str, Any],
     api_key: str | None,
 ) -> dict[int, str]:
-    # Resolve all local filename suggestions with one bounded model-page request.
+    # Reuse one bounded model-page lookup, with exact-file public metadata as fallback.
     version_id = _integer(version.get("id"), "model-version identity")
     model_id = _version_model_id(version)
     files = version.get("files")
@@ -609,24 +663,42 @@ def resolve_civitai_version_filenames(
         if not source_filename or source_filename in {".", ".."}:
             continue
         preferred = None
-        if page_payload is not None:
-            try:
+        try:
+            digest = _file_sha(file_data)
+            if page_payload is not None:
                 preferred = _preferred_filename_from_page_payload(
                     page_payload,
                     model_id=model_id,
                     version_id=version_id,
                     file_id=file_id,
-                    expected_sha256=_file_sha(file_data),
+                    expected_sha256=digest,
                     source_filename=source_filename,
                 )
-            except (TypeError, ValueError):
-                preferred = None
+            if preferred is None:
+                preferred = _preferred_filename_from_public_api(
+                    model_id=model_id,
+                    version_id=version_id,
+                    file_id=file_id,
+                    expected_sha256=digest,
+                    source_filename=source_filename,
+                    api_key=api_key,
+                )
+        except (TypeError, ValueError):
+            preferred = None
         resolved[file_id] = preferred or _precision_aware_filename(
             source_filename,
             file_data,
             all_files,
         )
-    return resolved
+    # Per-file metadata cannot report sibling names. Disambiguate the complete
+    # inspection after resolving them, just as the model-page path already does.
+    counts: dict[str, int] = {}
+    for name in resolved.values():
+        counts[name.casefold()] = counts.get(name.casefold(), 0) + 1
+    return {
+        file_id: _append_file_identity(name, file_id) if counts[name.casefold()] > 1 else name
+        for file_id, name in resolved.items()
+    }
 
 
 def _role_compatible(

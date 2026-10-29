@@ -1,3 +1,4 @@
+import { forwardCanvasNavigation } from './smart-model-loader-v2-navigation.js';
 import { app, api, hasNodePreview, revokeNodePreview } from './comfy/index.js';
 import { NODE_IDS, SAMPLER_NODE_ID, WIDGET_TYPE, EDITOR_KEY, LoaderState, clone } from './smart-model-loader-v2-state.js';
 import { LoaderForm } from './smart-model-loader-v2-ui.js';
@@ -53,6 +54,7 @@ class LoaderController {
         // Scope interaction to the component, including keyboard editing inside nodes.
         this.root.addEventListener('pointerdown', event => event.stopPropagation());
         this.root.addEventListener('keydown', event => event.stopPropagation());
+        this.disposeNavigation = forwardCanvasNavigation(this.root);
         this.widget = node.addDOMWidget(name, WIDGET_TYPE, this.root, {
             getValue: () => this.value(), setValue: value => this.restore(value),
             getMinHeight: () => this.height, getMaxHeight: () => this.height, getHeight: () => this.height,
@@ -215,7 +217,7 @@ class LoaderController {
     }
     dispose() {
         if (this.disposed) return;
-        this.disposed = true; this.observer.disconnect();
+        this.disposed = true; this.observer.disconnect(); this.disposeNavigation();
         liveLoaders.delete(this);
         for (const target of this.downloadTargets ?? []) target.release();
         if (this.frame) cancelAnimationFrame(this.frame);

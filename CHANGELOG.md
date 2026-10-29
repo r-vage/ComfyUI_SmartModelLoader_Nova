@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026-10-29
+
+### Version: 1.0.9
+
+- **Fix**
+  - Restore middle-button canvas panning and wheel zoom over node panels in classic ComfyUI and Nodes 2.0. Keep normal control clicks and native sampler image navigation intact.
+  - Use verified Civitai author filenames when the model-page lookup is blocked or incomplete. Match the exact model, version, file and SHA-256 before suggesting a name; preserve manual filename overrides.
+- **Chore**
+  - Rename the download dialog and launchers to Download Manager Nova and align its guide.
+- **Changed files**
+  - core/model_loader/acquisition.py
+  - js/smart-model-loader-download-manager.js
+  - Readme/Download_Manager.md
+  - js/smart-model-loader-v2-navigation.js
+  - js/smart-model-loader-v2.js
+  - pyproject.toml
+
 ## 2026-10-25
 
 ### Version: 1.0.8

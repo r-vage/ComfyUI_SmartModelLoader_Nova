@@ -1,4 +1,4 @@
-# SML2 Download Manager (Beta)
+# Download Manager Nova
 
 Download Manager lists and downloads model files from CivitAI and Hugging Face.
 Open it from a resource's **Source / integrity** controls to return the completed
@@ -63,9 +63,9 @@ For an empty LoRA Stack row, open its **i** button and follow the
 ## Opening the manager
 
 - Choose **Open in Download Manager** in a resource's **Source / integrity** controls to keep its return target.
-- Left toolbar: choose **SML2 Download Manager (Beta)**. The launcher sidebar closes immediately while the modal stays open.
-- SML2 menu: choose **SML2 → SML2 Download Manager (Beta)**.
-- Classic menu: use the **SML2 Download Manager (Beta)** button in the legacy top menu.
+- Left toolbar: choose **Download Manager Nova**. The launcher sidebar closes immediately while the modal stays open.
+- SML2 menu: choose **SML2 → Download Manager Nova**.
+- Classic menu: use the **Download Manager Nova** button in the legacy top menu.
 
 The manager follows the [Node design](Node_Design.md) selected in **Settings → SML2 → Appearance**, with comfortably sized controls. Neutral is the default. The separate **Source** and **View** bars share the top row, with Source first. Choose **CivitAI** or **Hugging Face** under Source, and switch between **Files** and **Queue** under View. Selected options match the loader forms, including their purple highlight in Jade.
 

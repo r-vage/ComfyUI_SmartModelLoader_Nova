@@ -1,5 +1,5 @@
 /**
- * Smart Model Loader Download Manager (Beta).
+ * Download Manager Nova.
  * Standalone modal, grid, state, API client, events, and launcher surfaces.
  */
 
@@ -362,7 +362,7 @@ class DownloadManagerModal {
         this.backdrop.addEventListener('keydown', event => this.handleDialogKey(event));
 
         const header = el('header', 'sml2-dlm-header');
-        const title = el('h2', '', 'SML2 Download Manager (Beta)');
+        const title = el('h2', '', 'Download Manager Nova');
         title.id = 'sml2-dlm-title';
         const views = optionBar('View');
         this.navigation = el('div', 'sml2-dlm-navigation');
@@ -1156,7 +1156,7 @@ async function injectClassicButton() {
     if (existing?.isConnected) return;
     const host = app.ui?.menuContainer;
     if (!host) return;
-    const launch = el('button', 'sml2-dlm-classic', 'SML2 Download Manager (Beta)');
+    const launch = el('button', 'sml2-dlm-classic', 'Download Manager Nova');
     launch.type = 'button';
     launch.dataset.smartModelLoaderV2DownloadManagerClassic = 'true';
     launch.addEventListener('click', () => manager.open());
@@ -1170,7 +1170,7 @@ function registerSidebarLauncher() {
     extensionManager.registerSidebarTab({
         id: SIDEBAR_TAB_ID,
         icon: 'pi pi-download',
-        title: 'SML2 Download Manager (Beta)',
+        title: 'Download Manager Nova',
         tooltip: 'Inspect provider files and manage verified model downloads',
         type: 'custom',
         render: host => {
@@ -1196,9 +1196,9 @@ app.registerExtension({
     name: 'SML2.DownloadManager',
     commands: [{
         id: COMMAND_ID,
-        label: 'SML2 Download Manager (Beta)',
+        label: 'Download Manager Nova',
         icon: 'pi pi-download',
-        tooltip: 'Open the SML2 Download Manager (Beta)',
+        tooltip: 'Open Download Manager Nova',
         function: () => manager.open(),
     }],
     menuCommands: [{ path: ['SML2'], commands: [COMMAND_ID] }],
