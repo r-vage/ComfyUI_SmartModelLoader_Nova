@@ -1,5 +1,12 @@
 import { NODE_ID, SAMPLER_NODE_ID, EDITOR_KEY, canonical, queuedConfiguration, seedAfterAcceptance } from './smart-model-loader-v2-state.js';
 import { parseSamplerConfiguration } from './smart-model-loader-v2-sampler-state.js';
+import { NATIVE_NODE_ID } from './smart-model-loader-native-bindings.js';
+
+export function hasNativeSeedOverride(output, node) {
+    const link = node.inputs.pipe_opt;
+    const producer = Array.isArray(link) ? output[link[0]] : null;
+    return producer?.class_type === NATIVE_NODE_ID && producer.inputs.seed != null;
+}
 
 function liveNode(graph, executionId) {
     let node;
@@ -32,6 +39,7 @@ export function installQueueHook(api, app, controllers) {
         const updates = [];
         for (const [id, node] of entries) {
             const sampler = node.class_type === SAMPLER_NODE_ID;
+            if (!sampler && hasNativeSeedOverride(output, node)) continue;
             // Pipe values are only known during execution. Leave the local seed
             // policy untouched when the pipe owns settings; the backend resolves
             // and records a local seed only if the pipe has none.

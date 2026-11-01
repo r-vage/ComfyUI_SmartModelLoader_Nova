@@ -8,36 +8,19 @@ import { SamplerState } from './smart-model-loader-v2-sampler-state.js';
 import { SamplerForm, completeSamplerPreview } from './smart-model-loader-v2-sampler.js';
 import { installQueueHook } from './smart-model-loader-v2-queue.js';
 import { openDownloadManager } from './smart-model-loader-download-manager.js';
-import { captureDownloadTarget, onDownloadCatalogChange } from './smart-model-loader-v2-downloads.js';
+import { captureDownloadTarget } from './smart-model-loader-v2-downloads.js';
 import { captureRenameTarget } from './smart-model-loader-v2-files.js';
+import { catalog, request, invalidateCatalog, onCatalogChange } from './smart-model-loader-catalog.js';
 
 const controllers = new WeakMap();
 const liveLoaders = new Set();
 const graphHostKey = Symbol('SML2.V2.Host');
-const catalogRequests = new Map();
-onDownloadCatalogChange(() => {
-    catalogRequests.clear();
+onCatalogChange(profile => {
     // One request per profile, shared by every live loader; no per-node polling.
-    for (const controller of liveLoaders) controller.form.action(() => controller.refresh());
-});
-async function request(path, payload) {
-    const response = await api.fetchApi(`/smart-model-loader-v2/v2/${path}`, payload === undefined ? {} : {
-        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
-    });
-    const result = await response.json();
-    if (!response.ok) throw Error(result.error ?? 'The loader request failed');
-    return result;
-}
-function catalog(profile, refresh = false) {
-    if (refresh || !catalogRequests.has(profile)) {
-        const pending = request(`catalog?${new URLSearchParams({ profile })}`).catch(error => {
-            if (catalogRequests.get(profile) === pending) catalogRequests.delete(profile);
-            throw error;
-        });
-        catalogRequests.set(profile, pending);
+    for (const controller of liveLoaders) if (!profile || controller.spec.profile === profile) {
+        controller.form.action(() => controller.refresh());
     }
-    return catalogRequests.get(profile);
-}
+});
 
 class LoaderController {
     constructor(node, name, options) {
@@ -66,6 +49,7 @@ class LoaderController {
         this.form = new Form({ root: this.root, getState: () => this.state,
             edit: (fn, render = true) => this.edit(fn, render), catalog: () => this.catalog,
             changed: () => this.measure(), refresh: () => this.refresh(true), reset: () => this.reset(),
+            settingsConnected: () => this.node.inputs?.some(input => input.name === 'pipe_opt' && input.link != null),
             readModelMetadata: (role, name) => request(`model-metadata?${new URLSearchParams({ role, name })}`),
             renameModel: async (field, newName) => {
                 const apply = captureRenameTarget(this, field);
@@ -92,7 +76,7 @@ class LoaderController {
                     const data = await request('preset', { name, overwrite, configuration: this.state.preset(), profile: this.spec.profile });
                     if (this.disposed) return;
                     this.generation++;
-                    this.catalog = { ...this.catalog, presets: data.presets }; catalogRequests.delete(this.spec.profile);
+                    this.catalog = { ...this.catalog, presets: data.presets }; invalidateCatalog(this.spec.profile);
                     if (revision === this.revision) this.edit(state => {
                         state.editor.presetName = name; delete state.editor.presetNeedsConversion;
                     }, false);
@@ -102,7 +86,7 @@ class LoaderController {
                     const data = await request('preset/delete', { name, profile: this.spec.profile });
                     if (this.disposed) return;
                     this.generation++;
-                    this.catalog = { ...this.catalog, presets: data.presets }; catalogRequests.delete(this.spec.profile);
+                    this.catalog = { ...this.catalog, presets: data.presets }; invalidateCatalog(this.spec.profile);
                     if (this.state.editor.presetName === name) this.edit(state => {
                         state.editor.presetName = ''; delete state.editor.presetNeedsConversion;
                     }, false);
@@ -267,6 +251,12 @@ app.registerExtension({
         nodeType.prototype.onAdded = function (...args) {
             const result = added?.apply(this, args);
             controllers.get(this)?.bindHost();
+            return result;
+        };
+        const connections = nodeType.prototype.onConnectionsChange;
+        nodeType.prototype.onConnectionsChange = function (...args) {
+            const result = connections?.apply(this, args);
+            if (this.inputs?.[args[1]]?.name === 'pipe_opt') controllers.get(this)?.form.render();
             return result;
         };
     },

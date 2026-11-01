@@ -23,6 +23,10 @@ The main nodes are **Smart Model Loader [SML2]**, **CLIP Loader [SML2]**,
 **LoRA Stack [SML2]**, **LoRA Stack Apply [SML2]**, and **KSampler Pipe [SML2]**.
 Smart Model Loader can be configured for model-only loading.
 
+**Smart Model Loader Settings [SML2]** adds native template and main-setting
+widgets for subgraphs. Connect **settings → pipe_opt**, then promote the controls
+you need. See [native settings for subgraphs](Readme/Smart_Loaders.md#native-settings-for-subgraphs).
+
 
 [![ComfyUI tested on 0.38.0](https://img.shields.io/badge/ComfyUI-tested%200.42.1-orange)](https://github.com/comfyanonymous/ComfyUI)
 [![Platform](https://img.shields.io/badge/tested-Linux%20Mint%2022.3-blue)](https://linuxmint.com/)

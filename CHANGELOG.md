@@ -1,5 +1,34 @@
 # Changelog
 
+## 2026-11-01
+
+### Version: 1.0.10
+
+- **Feat**
+  - Add Smart Model Loader Settings with native template selection and model, encoder, VAE and sampling overrides. Connect settings to the loader's optional pipe_opt and promote controls through renamed or nested subgraphs in classic canvas and Nodes 2.0.
+  - Accept a separate seed node through an optional INT socket, falling back to the panel seed when disconnected. Keep latent, batch, cleanup and integrity in the panel, with a single inherit/disabled control for template or panel LoRAs.
+  - Preserve template/panel inheritance and local denoise. Refresh filtered resource lists and keep inactive controls visible but disabled.
+- **Docs**
+  - Explain native settings connections, template precedence and subgraph controls. Tooltips clarify that inherited settings excluded from templates, such as seed and cleanup, use the loader panel.
+- **Changed files**
+  - core/model_loader/catalog.py
+  - core/model_loader/configuration.py
+  - core/model_loader/configuration_endpoints.py
+  - core/model_loader/native_controls.py
+  - core/model_loader/native_settings.py
+  - js/smart-model-loader-catalog.js
+  - js/smart-model-loader-native-bindings.js
+  - js/smart-model-loader-native-settings.js
+  - js/smart-model-loader-v2-queue.js
+  - js/smart-model-loader-v2-state.js
+  - js/smart-model-loader-v2-ui.js
+  - js/smart-model-loader-v2.js
+  - py/RvConfig_SmartModelLoaderSettings.py
+  - py/RvLoader_SmartModelLoaderV2.py
+  - README.md
+  - Readme/Smart_Loaders.md
+  - pyproject.toml
+
 ## 2026-10-29
 
 ### Version: 1.0.9

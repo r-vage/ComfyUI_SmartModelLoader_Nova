@@ -7,6 +7,57 @@ Include sits directly below Model Mode. The panel follows the node's
 background color, including later color changes, while its controls keep Jade
 accents. Repeated file rows use a subtle tint over the node background.
 
+## Native settings for subgraphs
+
+Add **Smart Model Loader Settings [SML2]** from **Smart Model Loader Nova →
+Settings**. Connect its **settings** output to the loader's optional **pipe_opt**
+input. The loader continues to produce the normal loaded **PIPE**.
+
+Put both nodes inside a subgraph and promote the native controls you need to
+the subgraph boundary. Alternatively, keep Settings outside and expose the
+loader's `pipe_opt` as a subgraph input. Renamed inputs, nested subgraphs and
+separate instances retain their own settings in classic canvas and Nodes 2.0.
+Promote related controls together, such as model mode/model name or CLIP
+source/type/encoder names, so the visible selectors can follow that instance's
+choices.
+
+**template** selects an existing Smart Loader preset for fast switching. Each
+execution starts from the panel, applies the selected template, then applies
+explicit native overrides. Template switching keeps those overrides. Set an
+override back to its inherit value to let the template control it again.
+Disconnecting `pipe_opt` restores the panel's configuration.
+
+| Native controls | Inherit value / behavior |
+| --- | --- |
+| Template, model mode/file, component sources, CLIP type/files/skip, VAE/audio VAE, UNet dtype | `(inherit)` keeps the selected template or panel value. `(none)` removes an encoder row; `disabled` excludes a component. |
+| Model sampling, sampler, scheduler, sampler inclusion | `(inherit)` keeps the template or panel setting. Sections must be enabled before their overrides take effect. |
+| Steps | `0` inherits. |
+| CFG, denoise, Flux guidance and model-sampling shifts | `-1` inherits. Zero is an explicit value. |
+| LoRAs | `(inherit)` uses the template's enabled stack, or the panel's stack without a template. `disabled` skips that stack. There are no individual LoRA file/strength controls. |
+| Optional seed input | Connect an **INT** seed directly. Without a connection, the loader panel supplies its seed value and policy. |
+
+Templates carry model options, ordered encoder files and enabled LoRAs with
+their strengths. Edit those full setups in the main panel and save them there.
+Latent creation, dimensions, batch size, cleanup and local integrity stay in the
+loader panel; Settings has no widgets or inputs for them. Inherited denoise also
+comes from the panel and is retained even when its Sampler section is disabled.
+
+Connect a separate seed node's **INT** output to **Settings → seed**. This is an
+optional socket with no widget, mode selector or seed generation. The connected
+value is used directly, including zero; the external node owns randomizing or
+incrementing it. Disconnecting the seed restores the panel's seed value and
+policy. Templates do not save seeds. A connected seed also works through a
+subgraph input and takes priority without advancing the unused panel seed.
+
+Inactive native widgets remain visible but disabled when their dependency is
+known. When a dependency arrives through another input at execution time, the
+loader validates the resulting setup. **Refresh lists** updates local models
+and templates, preserving an unavailable selection until you replace it.
+Template edits on disk are read on subsequent execution. Missing files or
+templates report errors; choosing a template never downloads resources or
+rewrites the preset. Resource metadata is retained for the same file and cleared
+when an override selects a different file.
+
 ## Visual tour
 
 These screenshots show the current node in a running Nodes 2.0 interface with

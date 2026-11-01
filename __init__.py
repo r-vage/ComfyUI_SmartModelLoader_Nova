@@ -46,6 +46,7 @@ class SmartModelLoaderExtension(ComfyExtension):
         from .py.RvCond_ConditioningZeroOut import RvCond_ConditioningZeroOut
         from .py.RvCond_TextEncodeMiniMaxMusic3 import RvCond_TextEncodeMiniMaxMusic3
         from .py.RvCond_TextEncodeQwenImage21 import RvCond_TextEncodeQwenImage21
+        from .py.RvConfig_SmartModelLoaderSettings import RvConfig_SmartModelLoaderSettings
         from .py.RvLoader_ClipLoaderV2 import RvLoader_ClipLoaderV2
         from .py.RvLoader_SmartModelLoaderV2 import RvLoader_SmartModelLoaderV2
         from .py.RvLoader_VaeLoader import RvLoader_VaeLoader
@@ -68,6 +69,7 @@ class SmartModelLoaderExtension(ComfyExtension):
 
         node_list: list[type[io.ComfyNode]] = [
             RvLoader_SmartModelLoaderV2,
+            RvConfig_SmartModelLoaderSettings,
             RvLoader_ClipLoaderV2,
             RvLoader_VaeLoader,
             RvLoader_VaeLoaderVideoAudio,

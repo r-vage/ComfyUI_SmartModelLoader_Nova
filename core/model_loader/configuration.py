@@ -327,7 +327,7 @@ def validate_configuration(raw, *, spec=None, require_files=False, preset=False,
     optional = ["clip", "vae", "audioVae", "loras", "latent", "sampler", "modelSampling"]
     if not preset:
         required += ["memory", "integrity"]
-        optional.append("seed")
+        optional += ["seed", "localDenoise"]
     object_fields(config, required, optional, path="preset" if preset else "configuration")
     if type(config["version"]) is not int or config["version"] != 1:
         raise ValueError("Unsupported configuration version; expected version 1")
@@ -442,6 +442,9 @@ def validate_configuration(raw, *, spec=None, require_files=False, preset=False,
             raise ValueError("Seed must be a decimal string from 0 to 18446744073709551615")
         if seed["policy"] not in ("fixed", "random", "increment", "decrement"):
             raise ValueError("Unsupported seed policy")
+    if "localDenoise" in config:
+        validate_fields({"localDenoise": config["localDenoise"]},
+                        {"localDenoise": SAMPLER["denoise"]}, path="configuration")
     return config
 
 

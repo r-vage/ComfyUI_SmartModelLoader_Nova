@@ -19,8 +19,8 @@ export const button = (text, action, title = text) => {
 const basename = name => name?.split('/').at(-1) || 'Select local file…';
 
 export class LoaderForm {
-    constructor({ root, getState, edit, catalog, refresh, reset, loadPreset, savePreset, deletePreset, openDownloads, readModelMetadata, renameModel, changed }) {
-        Object.assign(this, { root, getState, edit, catalog, refresh, reset, loadPreset, savePreset, deletePreset, openDownloads, readModelMetadata, renameModel, changed });
+    constructor({ root, getState, edit, catalog, refresh, reset, loadPreset, savePreset, deletePreset, openDownloads, readModelMetadata, renameModel, changed, settingsConnected }) {
+        Object.assign(this, { root, getState, edit, catalog, refresh, reset, loadPreset, savePreset, deletePreset, openDownloads, readModelMetadata, renameModel, changed, settingsConnected });
         this.dialog = null;
         this.message = '';
         this.resourceSelections = new Map();
@@ -58,6 +58,8 @@ export class LoaderForm {
         this.changed();
     }
     build(content) {
+        if (this.settingsConnected?.()) content.append(element('div', 'sml-v2-note',
+            'Connected native settings apply their template and overrides. Inherited values use this panel; disconnect to restore the local setup.'));
         this.toolbar(content);
         const mode = this.bar('Model Mode:', Object.entries(this.spec.modes).map(([value, data]) => [value, data.label]),
             this.config.model.kind, value => this.edit(state => state.mode(value)), true,

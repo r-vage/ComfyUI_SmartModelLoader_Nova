@@ -10,7 +10,7 @@ export const MAX_SEED = (1n << 64n) - 1n;
 export const clone = value => JSON.parse(JSON.stringify(value));
 export const defaults = fields => Object.fromEntries(Object.entries(fields).map(([key, field]) => [key, clone(field.default)]));
 const SEED_SHORTCUTS = { '-1': 'random', '-2': 'increment', '-3': 'decrement' };
-const NODE_LOCAL_FIELDS = ['memory', 'integrity', 'seed', 'latent'];
+const NODE_LOCAL_FIELDS = ['memory', 'integrity', 'seed', 'latent', 'localDenoise'];
 const randomSeed = () => crypto.getRandomValues(new BigUint64Array(1))[0];
 const validSeed = value => typeof value === 'string' && /^(0|[1-9][0-9]{0,19})$/.test(value) && BigInt(value) <= MAX_SEED;
 
@@ -83,7 +83,7 @@ export class LoaderState extends SeedState {
         this.spec = spec;
         this.config = parseConfiguration(value);
         for (const key of Object.keys(this.config)) {
-            if (!['version', 'model', 'memory', 'integrity'].includes(key) && !Object.hasOwn(spec.features, key)) {
+            if (!['version', 'model', 'memory', 'integrity', 'localDenoise'].includes(key) && !Object.hasOwn(spec.features, key)) {
                 throw Error(`This loader does not support ${key}.`);
             }
         }
@@ -100,7 +100,17 @@ export class LoaderState extends SeedState {
         this.editor.loraOrder ??= this.config.loras?.entries.map(entry => entry.id) ?? [];
         this.reconcileBlockSwap();
     }
-    value() { return canonical(this.config); }
+    value() {
+        const config = clone(this.config);
+        delete config.localDenoise;
+        // Native templates resolve during execution, where editor-only drafts
+        // are unavailable. Carry the local denoise even with Sampler disabled.
+        if (!config.sampler) {
+            const denoise = this.editor.disabled.sampler?.denoise ?? this.editor.denoise ?? this.config.localDenoise;
+            if (denoise != null) config.localDenoise = denoise;
+        }
+        return canonical(config);
+    }
     sourcesFor(key) { return this.spec.componentSources[this.config.model.kind][key]; }
     get features() {
         return Object.fromEntries(Object.entries(this.spec.features)
@@ -108,7 +118,7 @@ export class LoaderState extends SeedState {
     }
     get denoise() {
         return this.config.sampler?.denoise ?? this.editor.disabled.sampler?.denoise
-            ?? this.editor.denoise ?? this.spec.sampler.denoise.default;
+            ?? this.editor.denoise ?? this.config.localDenoise ?? this.spec.sampler.denoise.default;
     }
     preset() {
         const value = clone(this.config);

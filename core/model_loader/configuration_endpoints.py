@@ -2,12 +2,12 @@
 
 import asyncio
 
-import folder_paths
 from aiohttp import web
 
 from ..download_manager.manager import get_manager
 from ..json_store import JsonStoreError
 from .acquisition import DownloadDestinationBusy
+from .catalog import collect_catalog
 from .configuration import MAX_CONFIGURATION_BYTES, validate_profile
 from .endpoints import global_mutation_denial, read_json_object_request, require_json_boolean
 from .integrity import read_saved_metadata
@@ -41,25 +41,6 @@ def collect_model_metadata(role, name, *, downloads=None):
             metadata.update(source=saved["source"], sha256=saved["sha256"])
             result["hashOrigin"] = "verified-download"
     return result
-
-
-def collect_catalog(*, profile="smart"):
-    validate_profile(profile)
-    result = {}
-    if profile == "lora":
-        return {"files": {"loras": folder_paths.get_filename_list("loras")},
-                "presets": list_configuration_presets(profile=profile)}
-    roles = (("clip", "text_encoders") if profile == "clip" else
-             ("checkpoints", "diffusion_models", "diffusion_models_gguf", "vae", "clip", "text_encoders", "loras"))
-    for role in roles:
-        result[role] = folder_paths.get_filename_list(role) if role in folder_paths.folder_names_and_paths else []
-    result["clip"] = sorted(set(result["clip"] + result.pop("text_encoders")), key=str.casefold)
-    if profile == "clip":
-        return {"files": result}
-    result["diffusion_models_gguf"] = sorted(set(result["diffusion_models_gguf"] + [
-        name for name in result["diffusion_models"] if name.lower().endswith(".gguf")
-    ]), key=str.casefold)
-    return {"files": result, "presets": list_configuration_presets(profile=profile)}
 
 
 def rename_local_model(role, name, new_name):
