@@ -1,9 +1,9 @@
-# Smart Model Loader logger with log-level filtering.
+# Smart Model Loader Nova logger with log-level filtering.
 #
 # Includes:
 # - cstr class for colored terminal output
 # - SmartModelLoaderLogger for filtered logging
-# - Message templates for Eclipse branding
+# - Message templates for Smart Model Loader Nova branding
 #
 # Usage:
 #     from .logger import log, cstr
@@ -119,7 +119,7 @@ class cstr(str):
         raise AttributeError(f"'cstr' object has no attribute '{attr}'")
 
     def print(self, **kwargs):
-        # Eclipse is commonly launched through a log-capturing pipe, where stdout
+        # ComfyUI is commonly launched through a log-capturing pipe, where stdout
         # is block-buffered instead of line-buffered. Keep status/progress output
         # observable while work is still running unless a caller opts out.
         kwargs.setdefault("flush", True)
@@ -127,21 +127,21 @@ class cstr(str):
 
 
 # =============================================================================
-# Message Templates - Eclipse Branding
+# Message Templates - Smart Model Loader Nova Branding
 # =============================================================================
 
 # Register standalone-branded message templates.
-cstr.color.add_code("msg", f"{cstr.color.LIGHTGREEN}Smart Model Loader: {cstr.color.END}")
+cstr.color.add_code("msg", f"{cstr.color.LIGHTGREEN}Smart Model Loader Nova: {cstr.color.END}")
 cstr.color.add_code(
     "warning",
-    f"{cstr.color.LIGHTGREEN}Smart Model Loader {cstr.color.LIGHTYELLOW}Warning: {cstr.color.END}",
+    f"{cstr.color.LIGHTGREEN}Smart Model Loader Nova {cstr.color.LIGHTYELLOW}Warning: {cstr.color.END}",
 )
 cstr.color.add_code(
     "debug",
-    f"{cstr.color.LIGHTGREEN}Smart Model Loader {cstr.color.LIGHTBEIGE}Debug: {cstr.color.END}",
+    f"{cstr.color.LIGHTGREEN}Smart Model Loader Nova {cstr.color.LIGHTBEIGE}Debug: {cstr.color.END}",
 )
 cstr.color.add_code(
-    "error", f"{cstr.color.RED}Smart Model Loader {cstr.color.END}Error: {cstr.color.END}",
+    "error", f"{cstr.color.RED}Smart Model Loader Nova {cstr.color.END}Error: {cstr.color.END}",
 )
 
 
@@ -149,7 +149,7 @@ cstr.color.add_code(
 # Log Level Configuration
 # =============================================================================
 
-# Path to Eclipse node directory
+# Path to this pack's node directory
 NODE_DIR = Path(__file__).resolve().parent.parent
 
 # Log level hierarchy: error < warning < info < debug

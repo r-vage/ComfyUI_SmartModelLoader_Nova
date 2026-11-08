@@ -1,5 +1,38 @@
 # Changelog
 
+## 2026-11-08
+
+### Version: 1.0.11
+
+- **Feat**
+  - Bundle MiniMax H3 LipSync and TFL2VA Smart Loader presets and their matching LoRA Stack presets.
+- **Fix**
+  - Create and maintain the local default manifest during startup. Extract new presets once and update changed defaults only when the user copy still matches its previous bundled hash. Preserve user edits and deletions, including older installations without a manifest. Skip malformed manifest encodings without preventing Nova from loading.
+  - Identify terminal and browser-console diagnostics as Smart Model Loader Nova so logs remain distinct when the original pack is also installed.
+- **Refactor**
+  - Remove the unused legacy widget performance, debounce, visibility and resizing utilities. Keep Advanced CLIP's custom-weight field visible and disable it when inactive, preserving values and native/subgraph connections. Keep panel wheel zoom and middle-button panning.
+- **Docs**
+  - Explain preset extraction, local manifest tracking and preservation of user changes.
+  - Document Advanced CLIP's inactive custom-weight control and preserved subgraph inputs.
+- **Changed files**
+  - .defaults/templates/MiniMaxH3_LipSync.json.example
+  - .defaults/templates/MiniMaxH3_TFL2VA.json.example
+  - .defaults/templates/lora-stack/MiniMaxH3_LipSync.json.example
+  - .defaults/templates/lora-stack/MiniMaxH3_TFL2VA.json.example
+  - core/keys.py
+  - core/logger.py
+  - core/migration.py
+  - core/model_loader/structured.py
+  - js/eclipse-clip-text-encode-advanced.js
+  - js/eclipse-widget-performance-utils.js
+  - js/smart-model-loader-native-bindings.js
+  - js/smart-model-loader-notifications.js
+  - README.md
+  - Readme/Smart_Loaders.md
+  - Readme/Model_Loader_Security.md
+  - Readme/Pipeline_Nodes.md
+  - pyproject.toml
+
 ## 2026-11-01
 
 ### Version: 1.0.10

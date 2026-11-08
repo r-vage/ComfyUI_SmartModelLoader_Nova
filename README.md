@@ -71,11 +71,14 @@ Smart Loader and LoRA presets apply only when selected. Their panels support
 search, a remembered save name, overwrite and deletion. Workflows retain their
 own settings. Smart Loader presets exclude denoise, Latent, Advanced settings and seeds.
 Smart Loader presets use `templates/`; LoRA presets use `templates/lora-stack/`.
-The pack includes 22 model presets. First setup copies missing presets into
-`templates/` and records completion in `.eclipse_loader_data_migrated`. Existing
-user presets are preserved. Later restarts and updates do not repeat extraction
-or restore deleted presets. To add or restore a bundled preset manually, copy its
-`.defaults/templates/NAME.json.example` file to `templates/NAME.json`.
+The pack includes 24 model presets and two LoRA Stack presets, including MiniMax H3
+LipSync and TFL2VA. Startup extracts each new bundled preset once and creates or
+updates the local, Git-ignored `.defaults/.manifest.json` with its bundled hash.
+When a bundled preset changes, only a user copy still matching the previously
+recorded hash is updated. User edits and deletions are preserved across restarts
+and updates, including older installations that do not yet have a manifest.
+To restore a bundled preset manually, copy its `.defaults/templates/NAME.json.example`
+file to `templates/NAME.json`; keep the `lora-stack/` subfolder for LoRA presets.
 Copy old Smart Loader template JSON files into `templates/` and select them to
 import their settings. A reminder prompts you to save and explicitly overwrite
 the file in the new format; loading alone preserves the original.

@@ -30,15 +30,15 @@ export function configureNativeSettings(node, data, configure, ...args) {
     return result;
 }
 
-export function settingsGroups(node, ancestors = new Set()) {
-    if ((node.comfyClass ?? node.type) === NATIVE_NODE_ID) return [{
+export function settingsGroups(node, ancestors = new Set(), nodeId = NATIVE_NODE_ID) {
+    if ((node.comfyClass ?? node.type) === nodeId) return [{
         path: String(node.id), fields: new Map((node.widgets ?? []).map(widget => [widget.name, {
             widget, node, input: node.inputs?.find(input => input.widget?.name === widget.name),
         }])), own: new Set((node.widgets ?? []).map(widget => widget.name)),
     }];
     if (!node.subgraph || ancestors.has(node.subgraph)) return [];
     const seen = new Set(ancestors).add(node.subgraph), groups = [];
-    for (const child of node.subgraph._nodes ?? []) for (const group of settingsGroups(child, seen)) {
+    for (const child of node.subgraph._nodes ?? []) for (const group of settingsGroups(child, seen, nodeId)) {
         const fields = new Map(group.fields), own = new Set();
         for (const input of node.inputs ?? []) {
             const widget = node.getWidgetFromSlot?.(input);
@@ -57,30 +57,37 @@ export function settingsGroups(node, ancestors = new Set()) {
     return groups;
 }
 
-const widgetListeners = new WeakMap();
-export function watchWidget(widget, listener) {
-    if (!widget) return () => {};
-    let record = widgetListeners.get(widget);
+const callbackListeners = new WeakMap();
+function watchCallback(target, key, listener) {
+    if (!target) return () => {};
+    let records = callbackListeners.get(target);
+    if (!records) { records = new Map(); callbackListeners.set(target, records); }
+    let record = records.get(key);
     if (!record) {
-        record = { previous: widget.callback, listeners: new Set() };
+        record = { previous: target[key], listeners: new Set() };
         record.callback = function (...args) {
             const result = record.previous?.apply(this, args);
             for (const notify of record.listeners) notify();
             return result;
         };
-        widget.callback = record.callback; widgetListeners.set(widget, record);
+        target[key] = record.callback; records.set(key, record);
     }
     record.listeners.add(listener);
     return () => {
         record.listeners.delete(listener);
         if (!record.listeners.size) {
-            if (widget.callback === record.callback) widget.callback = record.previous;
-            widgetListeners.delete(widget);
+            if (target[key] === record.callback) target[key] = record.previous;
+            records.delete(key);
+            if (!records.size) callbackListeners.delete(target);
         }
     };
 }
 
-export function installNativeSettings(root, { bindSettings, subscribeRefresh }) {
+export function watchWidget(widget, listener) {
+    return watchCallback(widget, 'callback', listener);
+}
+
+export function installNativeSettings(root, { bindSettings, subscribeRefresh, nodeId = NATIVE_NODE_ID }) {
     const graphs = new Map(), connections = new Map();
     let bindings = new Map(), pending = false, disposed = false;
     function schedule() {
@@ -103,7 +110,7 @@ export function installNativeSettings(root, { bindSettings, subscribeRefresh }) 
             }
             for (const node of graph._nodes ?? []) {
                 const records = new Map();
-                for (const group of settingsGroups(node)) {
+                for (const group of settingsGroups(node, new Set(), nodeId)) {
                     const previous = bindings.get(node)?.get(group.path);
                     const same = previous && group.own.size === previous.group.own.size
                         && group.fields.size === previous.group.fields.size
@@ -130,28 +137,24 @@ export function installNativeSettings(root, { bindSettings, subscribeRefresh }) 
             if (record.binding) record.binding.sync();
             else record.binding = bindSettings(record.node, record.group);
         }
-        for (const [node, hook] of connections) if (!next.has(node)) {
-            if (node.onConnectionsChange === hook.callback) node.onConnectionsChange = hook.previous;
+        for (const [node, release] of connections) if (!next.has(node)) {
+            release();
             connections.delete(node);
         }
         for (const node of next.keys()) if (!connections.has(node)) {
-            const previous = node.onConnectionsChange;
-            const callback = function (...args) {
-                const result = previous?.apply(this, args); schedule(); return result;
-            };
-            connections.set(node, { previous, callback }); node.onConnectionsChange = callback;
+            connections.set(node, watchCallback(node, 'onConnectionsChange', schedule));
         }
         bindings = next;
     }
-    const unsubscribe = subscribeRefresh(() => {
+    const unsubscribe = subscribeRefresh?.(() => {
         for (const records of bindings.values()) for (const { binding } of records.values()) void binding.refresh();
     });
     rebuild();
     return () => {
-        disposed = true; unsubscribe();
+        disposed = true; unsubscribe?.();
         for (const records of bindings.values()) for (const { binding } of records.values()) binding.dispose();
         for (const controller of graphs.values()) controller.abort();
-        for (const [node, hook] of connections) if (node.onConnectionsChange === hook.callback) node.onConnectionsChange = hook.previous;
+        for (const release of connections.values()) release();
         connections.clear(); bindings.clear(); graphs.clear();
     };
 }

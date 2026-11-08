@@ -165,7 +165,7 @@ def _load_configuration(request):
         model = apply_model_sampling(model, sampling_method=sampling["method"], **parameters)
     # Saved/API configurations can still contain settings from a non-dynamic session.
     if "blockSwap" in config["memory"] and not comfy.memory_management.aimdo_enabled:
-        model = apply_blockswap(model, log_prefix="Smart Model Loader", **config["memory"]["blockSwap"])
+        model = apply_blockswap(model, log_prefix="Smart Model Loader Nova", **config["memory"]["blockSwap"])
 
     return LoadResult(model, clip, vae, audio_vae, config["model"]["resource"]["name"], format_lora_string(loras))
 

@@ -283,8 +283,10 @@ preset** before saving; malformed existing presets are preserved.
 
 Each list row has a **×** delete button followed by a confirmation naming that
 preset. Deletion removes its saved configuration file and keeps the node's loaded
-settings. Bundled presets are extracted only during initial setup; deleted presets
-stay deleted after restarting or updating the pack. Deletion is available when
+settings. Each new bundled preset is extracted once, including presets added by
+an update. Later bundled changes update only copies that still match their last
+recorded bundled hash. User edits are preserved, and deleted presets stay deleted
+after restarting or updating the pack. Deletion is available when
 the prompt queue is idle. Refresh updates the list;
 opening the panel also refreshes it.
 

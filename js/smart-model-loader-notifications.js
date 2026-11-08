@@ -9,7 +9,7 @@ export function showSmartModelLoaderToast(summary, detail, severity = 'error', c
     // Keep full local diagnostics even when the toast service is unavailable.
     try {
         console[severity === 'error' ? 'error' : severity === 'warn' ? 'warn' : 'info'](
-            `[Smart Model Loader] ${summary}:`, detail);
+            `[Smart Model Loader Nova] ${summary}:`, detail);
     } catch { /* Diagnostics cannot replace the original failure. */ }
 
     const text = message.length > 1200 ? `${message.slice(0, 1200)}…` : message;

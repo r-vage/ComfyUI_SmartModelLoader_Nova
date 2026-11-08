@@ -13,6 +13,9 @@ same explicit checkpoint/encoder error used by existing workflows.
 `CLIP Text Encode (Advanced) [SML2]` adds a global multiplier plus Krea2
 multi-layer rebalancing. Choose `balanced`, `detail`, `subtle`, `uniform`, or
 `custom`; the custom preset accepts comma- or semicolon-separated weights.
+The weight field stays visible and is disabled while a different local preset is
+selected. Changing presets preserves its value and connections, including renamed
+or nested subgraph inputs. A connected preset is resolved at execution.
 `renormalize` preserves the original RMS after layer weighting, while
 `krea2_only_multiplier` leaves non-Krea2 conditioning unscaled. Non-Krea2 models
 skip layer rebalancing and retain the documented multiplier behavior.

@@ -85,8 +85,13 @@ queue record does not delete the downloaded model file.
 
 Smart Loader presets live in `templates/`, and LoRA Stack presets in
 `templates/lora-stack/`. Preset deletion removes the selected preset JSON only.
-Initial template extraction records completion in `.eclipse_loader_data_migrated`.
-Subsequent starts do not restore deleted presets from defaults or legacy folders.
+Legacy copying records completion in `.eclipse_loader_data_migrated`. Startup
+creates and maintains `.defaults/.manifest.json` locally to track bundled hashes
+for Smart Loader and LoRA Stack presets; the manifest remains Git-ignored.
+New presets are extracted once. Changed bundled presets replace a user copy only
+when it still matches the previous hash. Edited and deleted presets are preserved,
+including deletions from older installations without a manifest. Malformed
+manifests are preserved without extracting or updating presets.
 Loading a copied v1 template reads and converts its settings in memory; only an
 explicit save/overwrite replaces that file.
 

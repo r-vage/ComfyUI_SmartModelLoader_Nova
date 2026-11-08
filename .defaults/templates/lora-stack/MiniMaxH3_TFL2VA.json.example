@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "mode": "model",
+  "entries": [
+    {
+      "audioStrength": 1,
+      "clipStrength": 1,
+      "enabled": false,
+      "id": "lora-1",
+      "resource": {
+        "name": "minimax/MysticXXX_MMH3-V5.safetensors",
+        "sha256": "4168917daeb6e570a004bc6994f73d091b9f3e887f7e946bd00c0f2f7573e5f3",
+        "source": {
+          "provider": "civitai",
+          "reference": "urn:air:minimaxh3:lora:civitai:2856467@3416478+3309543"
+        }
+      },
+      "strength": 1
+    },
+    {
+      "audioStrength": 1,
+      "clipStrength": 1,
+      "enabled": false,
+      "id": "lora-2",
+      "resource": {
+        "name": "minimax/Minimax H3 Cinematic Look.safetensors",
+        "sha256": "cd9ef1ebb1ab9221492dc09f069de364fff1454fdcae76902754d07db6e58dcd",
+        "source": {
+          "provider": "civitai",
+          "reference": "urn:air:minimaxh3:lora:civitai:2908686@3289775+3174203"
+        }
+      },
+      "strength": 0.56
+    },
+    {
+      "audioStrength": 1,
+      "clipStrength": 1,
+      "enabled": false,
+      "id": "lora-3",
+      "resource": {
+        "name": "minimax/minimax_h3_fl2v_turbo_8step_v1.0_comfyui_bf16.safetensors"
+      },
+      "strength": 1
+    }
+  ]
+}

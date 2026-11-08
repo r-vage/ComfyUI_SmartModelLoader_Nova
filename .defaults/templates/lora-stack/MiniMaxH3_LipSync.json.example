@@ -1,0 +1,27 @@
+{
+  "entries": [
+    {
+      "audioStrength": 1,
+      "clipStrength": 1,
+      "enabled": true,
+      "id": "56b9505b-4cf6-4e51-b9bc-b7083fd4ce76",
+      "resource": {
+        "name": "minimax/minimax_h3_PDMD_DMAD_4step_r256_add_fro1_turbo_lora.safetensors",
+        "sha256": "b729385d6b338e7d07462aafccdaab76fa7dd9817a53e300f3264d842643bc6c"
+      },
+      "strength": 1
+    },
+    {
+      "audioStrength": 1,
+      "clipStrength": 1,
+      "enabled": true,
+      "id": "922cee1d-505e-4ba9-9cc0-13c767a485c2",
+      "resource": {
+        "name": "minimax/minimax_h3_turbo_v4_step600_pruned_comfyui.safetensors"
+      },
+      "strength": 1
+    }
+  ],
+  "mode": "model",
+  "version": 1
+}

@@ -6,7 +6,7 @@ __all__ = ["CATEGORY", "KEYS", "TEXTS", "category_display"]
 
 class TEXTS(Enum):
     CUSTOM_NODE_NAME = "Smart Model Loader"
-    LOGGER_PREFIX = "Smart Model Loader"
+    LOGGER_PREFIX = "Smart Model Loader Nova"
     CONCAT = "concatenated"
     INACTIVE_MSG = "inactive"
     INVALID_METADATA_MSG = "Invalid metadata raw"
