@@ -36,6 +36,25 @@ preserves the VAE's output; it does not add alpha to RGB images. Workflows saved
 without this option use the disabled default. Input-image encoding keeps its
 native VAE channel handling.
 
+## Live previews
+
+Live previews follow ComfyUI's selected method. **Auto/Latent2RGB** is a lightweight
+approximation that preserves the available latent detail. **TAESD** gives a more
+detailed preview when a matching preview decoder is installed.
+
+Only the first image/frame is previewed, displayed at up to 512 pixels or a smaller
+configured size. At the usual 512-pixel size, standard SD/SDXL/SD3/Flux TAESD decoders
+use overlapping tiles within the previous reduced preview's pixel-area budget.
+They retain up to 1024 pixels of source detail before resizing the image, at the
+cost of extra processing time per step. Video, packed Flux2 and 16x decoders, very
+narrow images and smaller preview settings keep the reduced-latent path.
+
+Preview decoders load on the first sampling step and release their resources
+before final VAE decoding, including when sampling fails or is interrupted.
+Latent2RGB keeps its native detail within that bound, including packed formats.
+If the preview decoder runs out of memory, live frames stop for that run while
+progress and sampling continue. Final images retain their full resolution.
+
 ## Seeds
 
 The shared seed row preserves unsigned 64-bit integers without rounding. Small

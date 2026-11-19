@@ -2,6 +2,22 @@
 
 ## 2026-11-19
 
+### Version: 1.0.13
+
+- **Fix**
+  - Bound KSampler Pipe's live previews to the first image/frame and 512 pixels on the longest preview side. Preserve native Latent2RGB detail and keep sampling and progress running if a preview-only OOM occurs.
+  - Preserve finer standard TAESD detail with overlapping tiles sized within the reduced preview's pixel-area budget. Retain conservative decoding for other formats, narrow images and smaller preview settings.
+  - Load preview decoders lazily and release their resources before final VAE decoding, including after sampling failures or interruption.
+- **Docs**
+  - Explain preview-method selection and memory limits during sampling, with full-resolution final outputs.
+- **Changed files**
+  - core/model_loader/sampler_preview.py
+  - core/model_loader/pipe_sampler.py
+  - Readme/KSampler_Pipe.md
+  - pyproject.toml
+
+## 2026-11-19
+
 ### Version: 1.0.12
 
 - **Feat**

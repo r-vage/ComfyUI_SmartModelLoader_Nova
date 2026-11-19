@@ -7,7 +7,6 @@ import secrets
 import comfy.sample
 import comfy.samplers
 import comfy.utils
-import latent_preview
 import nodes
 
 from ..common import get_workflow_node
@@ -22,6 +21,7 @@ from .configuration import (
     object_fields,
     validate_fields,
 )
+from .sampler_preview import prepare_callback
 
 SAMPLER_FIELDS = {**SAMPLER, "steps": {**SAMPLER["steps"], "default": 8},
                   "cfg": {**SAMPLER["cfg"], "default": 1.0}}
@@ -140,12 +140,16 @@ def sample_pipe(pipe, configuration, positive, negative, *, latent=None, image=N
         model, source["samples"], source.get("downscale_ratio_spacial"), source.get("downscale_ratio_temporal"),
     )
     noise = comfy.sample.prepare_noise(samples, settings["seed"], source.get("batch_index"))
-    callback = latent_preview.prepare_callback(model, settings["steps"]) if config["preview"] else None
-    sampled = comfy.sample.sample(
-        model, noise, settings["steps"], settings["cfg"], settings["sampler_name"], settings["scheduler"],
-        positive, negative, samples, denoise=settings["denoise"], noise_mask=source.get("noise_mask"),
-        callback=callback, disable_pbar=not comfy.utils.PROGRESS_BAR_ENABLED, seed=settings["seed"],
-    )
+    callback = prepare_callback(model, settings["steps"]) if config["preview"] else None
+    try:
+        sampled = comfy.sample.sample(
+            model, noise, settings["steps"], settings["cfg"], settings["sampler_name"], settings["scheduler"],
+            positive, negative, samples, denoise=settings["denoise"], noise_mask=source.get("noise_mask"),
+            callback=callback, disable_pbar=not comfy.utils.PROGRESS_BAR_ENABLED, seed=settings["seed"],
+        )
+    finally:
+        if callback is not None:
+            callback.release()
     latent_out = {key: value for key, value in source.items()
                   if key not in ("downscale_ratio_spacial", "downscale_ratio_temporal")}
     latent_out["samples"] = sampled
