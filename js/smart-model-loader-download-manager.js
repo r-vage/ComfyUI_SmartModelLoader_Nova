@@ -11,6 +11,7 @@ const COMMAND_ID = 'SML2.DownloadManager.Open';
 const SIDEBAR_TAB_ID = 'smart-model-loader-v2-download-manager';
 const CSS_ID = 'smart-model-loader-v2-download-manager-css';
 const PAGE_SIZE = 50;
+const completionDateFormat = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' });
 
 // Jade controls and Director option bars match the loader forms. The modal
 // keeps its own comfortable control sizing and does not depend on a canvas host.
@@ -1037,8 +1038,13 @@ class DownloadManagerModal {
         text(row.file, job.destination?.filename || 'Unknown');
         text(row.provider, job.provider_identity?.provider || 'Unknown');
         text(row.destination, `${job.destination?.category || ''} / ${job.destination?.relative_path || ''}`);
+        let stateLabel = job.state;
+        if (job.state === 'completed' && typeof job.completed_at === 'string') {
+            const completedAt = Date.parse(job.completed_at);
+            if (Number.isFinite(completedAt)) stateLabel += ` · ${completionDateFormat.format(completedAt)}`;
+        }
         const partial = job.has_partial ? ` — ${formatBytes(job.partial_bytes)} partial retained` : '';
-        text(row.state, `${job.state}${job.error ? ` — ${job.error}` : ''}${partial}`);
+        text(row.state, `${stateLabel}${job.error ? ` — ${job.error}` : ''}${partial}`);
         const percent = job.progress?.percent || 0;
         if (row.progress.value !== percent) row.progress.value = percent;
         row.progress.setAttribute('aria-label', `${job.state} ${percent} percent`);

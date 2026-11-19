@@ -45,6 +45,7 @@ export class GroupedDropdown {
         if (search) {
             menu.classList.add('sml-v2-popup-searchable');
             search.type = 'search'; search.placeholder = `${searchLabel}…`;
+            search.ondblclick = event => { search.select(); event.preventDefault(); event.stopPropagation(); };
             search.setAttribute('aria-label', searchLabel); search.autocomplete = 'off'; search.spellcheck = false;
             list.id = `${menu.id}-options`; search.setAttribute('aria-controls', list.id);
             menu.append(search, list);

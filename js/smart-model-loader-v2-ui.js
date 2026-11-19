@@ -4,10 +4,29 @@ import { GroupedDropdown } from './smart-model-loader-v2-dropdown.js';
 import { dimensionAspect, latentError, readSizing } from './smart-model-loader-v2-sizing.js';
 import { locateResource } from './smart-model-loader-v2-downloads.js';
 
+function completeDecimal(event) {
+    const input = event.currentTarget;
+    if (input.type !== 'number' || input.disabled || input.readOnly) return;
+    // Prefix a zero on commit without rounding or rewriting partial edits.
+    const value = input.value.replace(/^(-?)\.(?=\d)/, (_match, sign) => `${sign}0.`);
+    if (value !== input.value) input.value = value;
+}
+function selectValue(event) {
+    const input = event.currentTarget;
+    if (input.disabled || input.readOnly
+        || !['text', 'search', 'url', 'tel', 'email', 'password', 'number', 'textarea'].includes(input.type)) return;
+    input.select();
+    event.preventDefault(); event.stopPropagation();
+}
 export const element = (tag, className = '', text = '') => {
     const node = document.createElement(tag);
     node.className = className;
     if (text) node.textContent = text;
+    if (tag === 'input' || tag === 'textarea') node.addEventListener('dblclick', selectValue);
+    if (tag === 'input') {
+        node.addEventListener('change', completeDecimal);
+        node.addEventListener('blur', completeDecimal);
+    }
     return node;
 };
 export const button = (text, action, title = text) => {
@@ -188,7 +207,7 @@ export class LoaderForm {
     }
     input(parent, key, label, value, setter, options = {}) {
         const wrapper = element('label', 'sml-v2-field'); wrapper.append(element('span', '', label));
-        const input = document.createElement('input');
+        const input = element('input');
         input.type = options.type ?? 'text'; input.dataset.field = key; input.setAttribute('aria-label', label);
         if (input.type === 'checkbox') input.checked = value; else input.value = value ?? '';
         for (const attr of ['min', 'max', 'step', 'inputMode', 'placeholder']) if (options[attr] != null) input[attr] = options[attr];
@@ -668,7 +687,7 @@ export class LoaderForm {
     }
     listPicker({ title, searchLabel, noun, values, selected, onSelect, refresh }) {
         const dialog = this.openDialog(title);
-        const search = document.createElement('input'); search.type = 'search'; search.placeholder = `${searchLabel}…`;
+        const search = element('input'); search.type = 'search'; search.placeholder = `${searchLabel}…`;
         search.setAttribute('aria-label', searchLabel);
         const results = element('div', 'sml-v2-results');
         const count = element('div', 'sml-v2-note'); let limit = 100;
@@ -713,13 +732,13 @@ export class LoaderForm {
             ? 'Presets save the mode and all rows, including bypass state and strengths. Local integrity stays with each node.'
             : 'Presets include enabled LoRAs. Denoise, Latent, Advanced settings and seeds stay with each node.'));
         this.presetConversionHint(dialog);
-        const label = element('label', '', 'Preset name'); const name = document.createElement('input');
+        const label = element('label', '', 'Preset name'); const name = element('input');
         name.setAttribute('aria-label', 'Preset name'); name.maxLength = 128;
         name.value = this.state.editor.presetName || ''; label.append(name);
         const overwriteLabel = element('label', '', ' Overwrite existing preset');
         const overwrite = document.createElement('input'); overwrite.type = 'checkbox'; overwriteLabel.prepend(overwrite);
         const status = element('div', 'sml-v2-note'); status.setAttribute('role', 'status');
-        const search = document.createElement('input'); search.type = 'search'; search.placeholder = 'Search presets…';
+        const search = element('input'); search.type = 'search'; search.placeholder = 'Search presets…';
         search.setAttribute('aria-label', 'Search presets');
         const results = element('div', 'sml-v2-results'); results.setAttribute('aria-label', 'Presets');
         const count = element('div', 'sml-v2-note');

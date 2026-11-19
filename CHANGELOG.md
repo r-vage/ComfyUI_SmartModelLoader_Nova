@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-11-19
+
+### Version: 1.0.12
+
+- **Feat**
+  - Show the local finish date and time beside the completed status in the Download Manager queue.
+- **Fix**
+  - Add the leading zero to decimal entries in custom panels when users press Enter, press Tab or click away, including negative decimals.
+  - Select the whole editable field on double-click in loader panels and their dialogs, including text, numbers, seeds and searches, so typing replaces its contents.
+- **Changed files**
+  - js/smart-model-loader-download-manager.js
+  - js/smart-model-loader-v2-dropdown.js
+  - js/smart-model-loader-v2-ui.js
+  - pyproject.toml
+
 ## 2026-11-08
 
 ### Version: 1.0.11
