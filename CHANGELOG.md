@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-11-22
+
+### Version: 1.0.14
+
+- **Fix**
+  - Let Download Manager finish verified downloads while ComfyUI runs prompts, including resumed transfers and explicit overwrites. Retry the install automatically if the operating system locks the destination.
+- **Changed files**
+  - core/download_manager/manager.py
+  - core/model_loader/acquisition.py
+  - Readme/Download_Manager.md
+  - Readme/Model_Loader_Security.md
+  - pyproject.toml
+
 ## 2026-11-19
 
 ### Version: 1.0.13

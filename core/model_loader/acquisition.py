@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import errno
 import hashlib
 import hmac
 import ipaddress
@@ -12,6 +13,7 @@ import shutil
 import socket
 import stat
 import threading
+import time
 from pathlib import Path, PurePosixPath
 from typing import Any, TypedDict
 from urllib.parse import parse_qs, quote, urljoin, urlparse
@@ -1147,6 +1149,18 @@ def _fsync_directory(path: Path) -> None:
         os.close(descriptor)
 
 
+def _regular_file_stamp(path: Path) -> tuple[int, ...]:
+    info = path.lstat()
+    if not stat.S_ISREG(info.st_mode):
+        raise ValueError("Download path must be a non-symlink regular file")
+    return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+
+
+def _is_busy_file_error(error: OSError) -> bool:
+    # Windows reports sharing/lock violations and files with an open mapped section.
+    return error.errno in {errno.EBUSY, errno.EAGAIN} or getattr(error, "winerror", None) in {32, 33, 1224}
+
+
 def _promote_verified_staging(
     staging: Path,
     destination: Path,
@@ -1197,6 +1211,7 @@ def _download_file_locked(
     download_id: str | None = None,
     max_bytes: int = MAX_DOWNLOAD_BYTES,
     require_idle_promotion: bool = False,
+    retry_busy_promotion: bool = False,
     allow_replace_existing: bool = False,
     keep_partial_on_cancel: bool = False,
     provider_name: str = "CivitAI",
@@ -1236,26 +1251,82 @@ def _download_file_locked(
     )
     digest_algorithm = "sha256" if valid_sha256 else "git-sha1"
 
+    def finish_staging(size: int) -> bool:
+        report_phase("hashing", 0, size)
+        verified_stamp = _regular_file_stamp(staging)
+        actual = _provider_digest_file(
+            staging,
+            progress_cb=lambda processed, total: report_phase("hashing", processed, total),
+            algorithm=digest_algorithm,
+        )
+        if _regular_file_stamp(staging) != verified_stamp:
+            raise ValueError("Staged download changed during verification")
+        if not hmac.compare_digest(actual, expected):
+            staging.unlink(missing_ok=True)
+            report_phase("failed", size, size)
+            log.error(provider_name, f"Downloaded bytes did not match the {provider_name} provider digest")
+            return False
+
+        def promote() -> None:
+            if _regular_file_stamp(staging) != verified_stamp:
+                raise ValueError("Staged download changed after verification")
+            _promote_verified_staging(
+                staging, destination, expected,
+                digest_algorithm=digest_algorithm,
+                allow_replace_existing=allow_replace_existing,
+            )
+
+        if require_idle_promotion:
+            report_phase("locking", size, size)
+            with maintenance_if_idle() as acquired:
+                if not acquired:
+                    raise BlockingIOError("Prompt queue is active")
+                report_phase("promoting", size, size)
+                promote()
+        elif retry_busy_promotion:
+            # The background worker owns this destination. Retry only a real OS file lock.
+            report_phase("locking", size, size)
+            while True:
+                try:
+                    promote()
+                except OSError as error:
+                    if not _is_busy_file_error(error):
+                        raise
+                    time.sleep(1)
+                else:
+                    break
+            report_phase("promoting", size, size)
+        else:
+            report_phase("promoting", size, size)
+            promote()
+        _fsync_directory(destination.parent)
+        invalidate_cache_entry(destination)
+        return True
+
     if staging.is_symlink() or (staging.exists() and not staging.is_file()):
         log.error(provider_name, "Download staging path must be a non-symlink regular file")
         return False
 
     if destination.exists():
-        destination_size = destination.stat().st_size if destination.is_file() else 0
+        if not destination.is_file():
+            return False
+        destination_size = destination.stat().st_size
         report_phase("verifying", 0, destination_size)
-        if destination.is_file() and hmac.compare_digest(
-            _provider_digest_file(
+        try:
+            existing_digest = _provider_digest_file(
                 destination,
                 progress_cb=lambda processed, total: report_phase(
                     "verifying", processed, total,
                 ),
                 algorithm=digest_algorithm,
-            ),
-            expected,
-        ):
-            return True
-        if not destination.is_file():
-            return False
+            )
+        except OSError as error:
+            # An explicit overwrite can still stage verified bytes if the old file is locked.
+            if not (retry_busy_promotion and allow_replace_existing and _is_busy_file_error(error)):
+                raise
+        else:
+            if hmac.compare_digest(existing_digest, expected):
+                return True
 
     partial_size = staging.stat().st_size if staging.is_file() and not staging.is_symlink() else 0
     headers = _auth_headers(api_key)
@@ -1269,44 +1340,8 @@ def _download_file_locked(
         with response:
             if partial_size:
                 if response.status_code == 416:
-                    report_phase("hashing", 0, partial_size)
-                    if hmac.compare_digest(
-                        _provider_digest_file(
-                            staging,
-                            progress_cb=lambda processed, total: report_phase(
-                                "hashing", processed, total,
-                            ),
-                            algorithm=digest_algorithm,
-                        ),
-                        expected,
-                    ):
-                        if require_idle_promotion:
-                            report_phase("locking", partial_size, partial_size)
-                            with maintenance_if_idle() as acquired:
-                                if not acquired:
-                                    raise BlockingIOError("Prompt queue is active")
-                                report_phase("promoting", partial_size, partial_size)
-                                _promote_verified_staging(
-                                    staging,
-                                    destination,
-                                    expected,
-                                    digest_algorithm=digest_algorithm,
-                                    allow_replace_existing=allow_replace_existing,
-                                )
-                        else:
-                            report_phase("promoting", partial_size, partial_size)
-                            _promote_verified_staging(
-                                staging,
-                                destination,
-                                expected,
-                                digest_algorithm=digest_algorithm,
-                                allow_replace_existing=allow_replace_existing,
-                            )
-                        _fsync_directory(destination.parent)
-                        invalidate_cache_entry(destination)
-                        return True
-                    staging.unlink(missing_ok=True)
-                    return False
+                    response.close()
+                    return finish_staging(partial_size)
                 if response.status_code != 206:
                     raise ValueError("Server did not honor the requested download range")
                 content_range = response.headers.get("Content-Range", "")
@@ -1386,47 +1421,7 @@ def _download_file_locked(
             if predicted_total is not None and downloaded != predicted_total:
                 raise OSError("Download was truncated")
 
-        report_phase("hashing", 0, downloaded)
-        actual = _provider_digest_file(
-            staging,
-            progress_cb=lambda processed, total: report_phase(
-                "hashing", processed, total,
-            ),
-            algorithm=digest_algorithm,
-        )
-        if not hmac.compare_digest(actual, expected):
-            staging.unlink(missing_ok=True)
-            report_phase("failed", downloaded, downloaded)
-            log.error(
-                provider_name,
-                f"Downloaded bytes did not match the {provider_name} provider digest",
-            )
-            return False
-        if require_idle_promotion:
-            report_phase("locking", downloaded, predicted_total or downloaded)
-            with maintenance_if_idle() as acquired:
-                if not acquired:
-                    raise BlockingIOError("Prompt queue is active")
-                report_phase("promoting", downloaded, predicted_total or downloaded)
-                _promote_verified_staging(
-                    staging,
-                    destination,
-                    expected,
-                    digest_algorithm=digest_algorithm,
-                    allow_replace_existing=allow_replace_existing,
-                )
-        else:
-            report_phase("promoting", downloaded, predicted_total or downloaded)
-            _promote_verified_staging(
-                staging,
-                destination,
-                expected,
-                digest_algorithm=digest_algorithm,
-                allow_replace_existing=allow_replace_existing,
-            )
-        _fsync_directory(destination.parent)
-        invalidate_cache_entry(destination)
-        return True
+        return finish_staging(downloaded)
     except DownloadCancelled:
         _deactivate_transfer(download_id, transfer)
         if not keep_partial_on_cancel:
@@ -1464,6 +1459,7 @@ def download_file(
     download_id: str | None = None,
     max_bytes: int = MAX_DOWNLOAD_BYTES,
     require_idle_promotion: bool = False,
+    retry_busy_promotion: bool = False,
     allow_replace_existing: bool = False,
     keep_partial_on_cancel: bool = False,
     provider_name: str = "CivitAI",
@@ -1483,6 +1479,7 @@ def download_file(
             download_id=download_id,
             max_bytes=max_bytes,
             require_idle_promotion=require_idle_promotion,
+            retry_busy_promotion=retry_busy_promotion,
             allow_replace_existing=allow_replace_existing,
             keep_partial_on_cancel=keep_partial_on_cancel,
             provider_name=provider_name,

@@ -101,9 +101,10 @@ files are never replaced. Only the initiating field is updated; other nodes and
 saved presets keep their filenames. Finish queued work before renaming.
 
 Preset writes and metadata updates use locked atomic JSON persistence. File
-maintenance coordinates with active loads/downloads, and download promotion
-requires an idle prompt queue. These controls cannot prevent another extension
-or external program from modifying the same files directly.
+maintenance coordinates with active loads and downloads. The Download Manager
+installs verified files during prompt execution. If the operating system reports
+a busy destination, it retries the atomic install. Other extensions and external
+programs can modify the same files directly.
 
 ## Endpoint boundaries
 

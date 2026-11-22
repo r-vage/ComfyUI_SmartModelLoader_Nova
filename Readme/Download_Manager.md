@@ -167,7 +167,9 @@ Conflict policies are:
 
 - `skip`: keep an existing destination and record whether it matches provider identity. A skipped job can be completed with an unverified file; only a verified match fills the calling loader;
 - `rename`: choose a contained collision-free local filename; and
-- `overwrite`: atomically replace the existing file only after provider verification.
+- `overwrite`: reuse the existing file if its digest matches, or atomically replace it after verifying the new download.
+
+Downloads can finish while ComfyUI is generating, including an explicit overwrite. On Linux, a model already loaded or memory-mapped keeps its original weights. A node that opens the same filename later reads the replacement. If the operating system locks the destination, the manager stays in `locking` and retries the install with the verified bytes.
 
 Every completed transfer receives a local SHA-256 sidecar. Verified transfers and
 verified skips also save the exact CivitAI AIR or HF repository/commit and the

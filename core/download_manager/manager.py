@@ -85,8 +85,6 @@ def _file_stamp(path: Path) -> list[int]:
 def _safe_error(error: BaseException) -> str:
     if isinstance(error, DownloadCancelled):
         return "Transfer cancelled"
-    if isinstance(error, BlockingIOError):
-        return "Promotion is waiting for the ComfyUI prompt queue to become idle"
     if isinstance(error, FileExistsError):
         return "Destination already exists"
     if isinstance(error, PermissionError):
@@ -878,7 +876,7 @@ class DownloadQueueManager:
                 progress_cb=lambda processed, total: self._progress(job_uuid, processed, total),
                 phase_cb=lambda phase, processed, total: self._phase(job_uuid, phase, processed, total),
                 download_id=job_uuid,
-                require_idle_promotion=True,
+                retry_busy_promotion=True,
                 allow_replace_existing=conflict == "overwrite",
                 keep_partial_on_cancel=True,
                 provider_name="CivitAI" if provider == "civitai" else "Hugging Face",
