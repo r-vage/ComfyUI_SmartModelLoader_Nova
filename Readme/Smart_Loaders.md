@@ -281,6 +281,16 @@ is remembered in workflows and clones. Keep it to update the preset, or enter
 another name to save a copy. For an existing name, check **Overwrite existing
 preset** before saving; malformed existing presets are preserved.
 
+Smart Model Loader Nova includes **MiniMaxH3_LipSync** and **MiniMaxH3_TFL2VA**.
+Select either preset, then choose your installed diffusion model, CLIP encoder,
+video VAE and audio VAE in the file pickers. Both presets use Comfy Kitchen
+attention where available and open with PyTorch attention on other installations.
+The LoRA Stack preset menu includes a matching entry for each.
+
+For WAN InfiniteTalk, select **Wan_Lipsync**. Its file pickers cover the Wan 2.1
+I2V model, UMT5 text encoder, VAE and LightX2V LoRA. Select the InfiniteTalk
+patch and speech encoder in the workflow’s WAN group.
+
 Each list row has a **×** delete button followed by a confirmation naming that
 preset. Deletion removes its saved configuration file and keeps the node's loaded
 settings. Each new bundled preset is extracted once, including presets added by

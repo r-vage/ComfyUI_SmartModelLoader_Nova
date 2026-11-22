@@ -10,6 +10,7 @@ from dataclasses import dataclass
 from pathlib import PurePosixPath
 from typing import Any
 
+from .attention import ATTENTION_BACKEND_DEFAULT
 from .clip_validation import validate_ltx_projection
 from .validation import ResolvedModelFile, resolve_clip_file, resolve_model_file
 
@@ -145,7 +146,7 @@ def default_configuration(*, profile="smart"):
     return {
         "version": 1,
         "model": {"kind": "checkpoint", "resource": {"name": ""}, "options": {},
-                  "attentionBackend": "pytorch attention"},
+                  "attentionBackend": ATTENTION_BACKEND_DEFAULT},
         "clip": {"source": "baked", "skip": -2},
         "vae": {"source": "baked"},
         "memory": {"cleanup": True},
@@ -334,6 +335,9 @@ def validate_configuration(raw, *, spec=None, require_files=False, preset=False,
     spec = spec or editor_spec(profile=profile)
     model = config["model"]
     object_fields(model, ["kind", "resource", "options", "attentionBackend"], path="model")
+    backend = model["attentionBackend"]
+    if preset and backend == "comfy kitchen attention" and backend not in spec["attention"]:
+        model["attentionBackend"] = ATTENTION_BACKEND_DEFAULT
     validate_fields({"kind": model["kind"], "attentionBackend": model["attentionBackend"]},
                     {"kind": choice("Mode", list(MODES)),
                      "attentionBackend": choice("Attention", spec["attention"])}, path="model")

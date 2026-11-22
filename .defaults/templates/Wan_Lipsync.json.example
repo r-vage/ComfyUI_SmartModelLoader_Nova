@@ -1,0 +1,49 @@
+{
+  "clip": {
+    "encoders": [
+      {
+        "id": "clip-1",
+        "resource": {
+          "name": "nsfw_wan_umt5-xxl_bf16_fixed.safetensors"
+        }
+      }
+    ],
+    "skip": null,
+    "source": "external",
+    "type": "wan"
+  },
+  "loras": {
+    "entries": [
+      {
+        "id": "lora-1",
+        "resource": {
+          "name": "wan/lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors"
+        },
+        "strength": 1
+      }
+    ]
+  },
+  "model": {
+    "attentionBackend": "pytorch attention",
+    "kind": "unet",
+    "options": {
+      "weight_dtype": "default"
+    },
+    "resource": {
+      "name": "wan/Wan2_1-I2V-14B-720p_fp8_e4m3fn_scaled_KJ.safetensors"
+    }
+  },
+  "sampler": {
+    "cfg": 1,
+    "sampler_name": "euler",
+    "scheduler": "normal",
+    "steps": 4
+  },
+  "vae": {
+    "resource": {
+      "name": "Wan2_1_VAE_bf16.safetensors"
+    },
+    "source": "external"
+  },
+  "version": 1
+}

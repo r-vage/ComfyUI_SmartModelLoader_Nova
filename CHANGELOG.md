@@ -2,6 +2,20 @@
 
 ## 2026-11-22
 
+### Version: 1.0.15
+
+- **Feat**
+  - Bundle the Wan_Lipsync preset for WAN InfiniteTalk with editable model, text encoder, VAE and LightX2V LoRA selections.
+- **Fix**
+  - Open presets that specify Comfy Kitchen attention with PyTorch attention when the optional backend is unavailable. Both bundled MiniMax H3 presets can then be selected and customized.
+- **Changed files**
+  - .defaults/templates/Wan_Lipsync.json.example
+  - core/model_loader/configuration.py
+  - Readme/Smart_Loaders.md
+  - pyproject.toml
+
+## 2026-11-22
+
 ### Version: 1.0.14
 
 - **Fix**
