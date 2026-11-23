@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-11-23
+
+### Version: 1.0.16
+
+- **Fix**
+  - Double-click selects the word under the pointer in panel text fields. Triple-click selects the entire field, including multiline prompts.
+- **Changed files**
+  - js/smart-model-loader-v2-controls.js
+  - js/smart-model-loader-v2-dropdown.js
+  - js/smart-model-loader-v2-ui.js
+  - pyproject.toml
+
 ## 2026-11-22
 
 ### Version: 1.0.15

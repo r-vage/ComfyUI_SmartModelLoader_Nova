@@ -1,7 +1,6 @@
 // Grouped DOM choices with one top-layer popup, shared by both ComfyUI hosts.
-const make = (tag, className, text = '') => {
-    const node = document.createElement(tag); node.className = className; node.textContent = text; return node;
-};
+import { element as make } from './smart-model-loader-v2-controls.js';
+
 function label(button, text, ratio) {
     const value = make('span', 'sml-v2-select-value', text);
     if (ratio) {
@@ -45,7 +44,6 @@ export class GroupedDropdown {
         if (search) {
             menu.classList.add('sml-v2-popup-searchable');
             search.type = 'search'; search.placeholder = `${searchLabel}…`;
-            search.ondblclick = event => { search.select(); event.preventDefault(); event.stopPropagation(); };
             search.setAttribute('aria-label', searchLabel); search.autocomplete = 'off'; search.spellcheck = false;
             list.id = `${menu.id}-options`; search.setAttribute('aria-controls', list.id);
             menu.append(search, list);

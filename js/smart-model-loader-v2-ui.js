@@ -3,32 +3,9 @@ import { defaults, supportsFlux } from './smart-model-loader-v2-state.js';
 import { GroupedDropdown } from './smart-model-loader-v2-dropdown.js';
 import { dimensionAspect, latentError, readSizing } from './smart-model-loader-v2-sizing.js';
 import { locateResource } from './smart-model-loader-v2-downloads.js';
+import { element } from './smart-model-loader-v2-controls.js';
 
-function completeDecimal(event) {
-    const input = event.currentTarget;
-    if (input.type !== 'number' || input.disabled || input.readOnly) return;
-    // Prefix a zero on commit without rounding or rewriting partial edits.
-    const value = input.value.replace(/^(-?)\.(?=\d)/, (_match, sign) => `${sign}0.`);
-    if (value !== input.value) input.value = value;
-}
-function selectValue(event) {
-    const input = event.currentTarget;
-    if (input.disabled || input.readOnly
-        || !['text', 'search', 'url', 'tel', 'email', 'password', 'number', 'textarea'].includes(input.type)) return;
-    input.select();
-    event.preventDefault(); event.stopPropagation();
-}
-export const element = (tag, className = '', text = '') => {
-    const node = document.createElement(tag);
-    node.className = className;
-    if (text) node.textContent = text;
-    if (tag === 'input' || tag === 'textarea') node.addEventListener('dblclick', selectValue);
-    if (tag === 'input') {
-        node.addEventListener('change', completeDecimal);
-        node.addEventListener('blur', completeDecimal);
-    }
-    return node;
-};
+export { element };
 export const button = (text, action, title = text) => {
     const node = element('button', '', text);
     node.type = 'button'; node.title = title; node.onclick = action;
